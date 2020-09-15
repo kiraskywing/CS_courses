@@ -10,8 +10,8 @@
             "args": [
                 "-g",
                 "-o",
-                "test",
-                "test.c"
+                "demo",
+                "enum_type.c"
             ],
             "group": {
                 "kind": "build",
