@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "enum_type.c"
+                "bitwise_operators.c"
             ],
             "group": {
                 "kind": "build",
