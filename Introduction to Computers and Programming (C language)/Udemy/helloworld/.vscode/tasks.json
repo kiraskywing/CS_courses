@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "bitwise_operators.c"
+                "size_of_example.c"
             ],
             "group": {
                 "kind": "build",
