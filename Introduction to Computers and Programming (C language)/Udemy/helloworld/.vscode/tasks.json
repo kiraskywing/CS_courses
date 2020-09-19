@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "size_of_example.c"
+                "switch_statement.c"
             ],
             "group": {
                 "kind": "build",
