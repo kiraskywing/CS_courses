@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "switch_statement.c"
+                "amount_of_weekly_pay.c"
             ],
             "group": {
                 "kind": "build",
