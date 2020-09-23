@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "amount_of_weekly_pay.c"
+                "GuessTheNumber.c"
             ],
             "group": {
                 "kind": "build",
