@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "GuessTheNumber.c"
+                "array.c"
             ],
             "group": {
                 "kind": "build",
