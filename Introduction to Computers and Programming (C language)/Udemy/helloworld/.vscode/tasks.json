@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "array.c"
+                "prime_number.c"
             ],
             "group": {
                 "kind": "build",
