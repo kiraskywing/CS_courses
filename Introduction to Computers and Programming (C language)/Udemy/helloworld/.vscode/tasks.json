@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "func_practice.c"
+                "someFucns.c"
             ],
             "group": {
                 "kind": "build",
