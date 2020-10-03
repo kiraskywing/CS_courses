@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "someFucns.c"
+                "ticTacToe.c"
             ],
             "group": {
                 "kind": "build",
