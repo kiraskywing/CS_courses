@@ -11,7 +11,7 @@
                 "-g",
                 "-o",
                 "demo",
-                "ticTacToe.c"
+                "string_cmp.c"
             ],
             "group": {
                 "kind": "build",
