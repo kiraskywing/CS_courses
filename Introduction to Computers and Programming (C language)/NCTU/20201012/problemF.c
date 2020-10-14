@@ -2,12 +2,12 @@
 
 int main()
 {
-    int times = 0;
+    int times = 0, n, i;
     scanf("%d", &times);
 
     while (times > 0)
     {
-        int n = 0, i = 2;
+        n = 0, i = 2;
         scanf("%d", &n);
         times -= 1;
 
