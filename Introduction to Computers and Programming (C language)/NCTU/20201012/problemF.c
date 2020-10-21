@@ -5,30 +5,26 @@ int main()
     int times = 0, n, i;
     scanf("%d", &times);
 
-    while (times > 0)
+    for (int j = 0; j < times; j++)
     {
-        n = 0, i = 2;
+        n = 0;
         scanf("%d", &n);
-        times -= 1;
-
-        if (n == 1)
+        
+        if (n == 1) 
         {
-            printf("NO\n");
+            printf("NO\n"); 
             continue;
         }
-
-        while (i < n)
+        
+        for (i = 2; i * i <= n; i += 1)
         {
-            if (n % i != 0)
-                i += 1;
-            else
+            if (n % i == 0)
             {
                 printf("NO\n");
                 break;
             }
         }
-
-        if (i == n) printf("YES\n");
+        if (i * i > n) printf("YES\n");
     }
 
     return 0;
