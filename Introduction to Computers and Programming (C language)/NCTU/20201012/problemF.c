@@ -2,12 +2,11 @@
 
 int main()
 {
-    int times = 0, n, i;
+    int times, n, i;
     scanf("%d", &times);
 
     for (int j = 0; j < times; j++)
     {
-        n = 0;
         scanf("%d", &n);
         
         if (n == 1) 
