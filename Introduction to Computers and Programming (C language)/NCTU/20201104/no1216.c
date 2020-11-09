@@ -14,6 +14,14 @@ int main(void)
         n = temp;
     }
     
+    // int r;
+    // while (n > 0)
+    // {
+    //     r = m % n;
+    //     m = n;
+    //     n = r;
+    // }
+
     int res = gcd(m, n);
     printf("%d", res);
     
@@ -22,9 +30,5 @@ int main(void)
 
 int gcd(int m, int n)
 {
-    int r = m % n;
-    if (r == 0)
-        return n;
-    
-    return gcd(n, r);
+    return n == 0 ? m : gcd(n, m % n);
 }

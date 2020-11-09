@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-int m, n, res, x_start, y_start, x_end, y_end;
+int m, n, res;
 int shift[2][4] = {{0, 1, -1, 0}, {1, 0, 0, -1}};
-void bfs(int map[m][n], int visited[m][n], int queue[3][m * n], int start, int end);
+void bfs(int map[m][n], int visited[m][n], int queue[3][m * n]);
 bool valid_pos(int map[m][n], int visited[m][n], int x, int y);
 
 int main(void)
@@ -27,44 +27,41 @@ int main(void)
         }
     }
 
-    bfs(map, visited, queue, 0, 1);
+    bfs(map, visited, queue);
     printf("%d", res);
     return 0;
 }
 
-void bfs(int map[m][n], int visited[m][n], int queue[3][m * n], int start, int end)
+void bfs(int map[m][n], int visited[m][n], int queue[3][m * n])
 {
-    if (start == end)
-        return;
-
-    int count = 0;
-    for (int i = start; i < end; i++)
+    int start = -1, end = 0;
+    while (start < end)
     {
-        int x = queue[0][i];
-        int y = queue[1][i];
+        start++;
+        int x = queue[0][start];
+        int y = queue[1][start];
+        
         if (map[x][y] == -3)
         {
-            res = queue[2][i];
+            res = queue[2][start];
             return;
         }
-        
+
         int x2, y2;
-        for (int j = 0; j < 4; j++)
+        for (int i = 0; i < 4; i++)
         {
-            x2 = x + shift[0][j];
-            y2 = y + shift[1][j];
+            x2 = x + shift[0][i];
+            y2 = y + shift[1][i];
             if (valid_pos(map, visited, x2, y2))
             {
                 visited[x2][y2] = 1;
-                queue[0][end + count] = x2;
-                queue[1][end + count] = y2;
-                queue[2][end + count] = queue[2][i] + 1;
-                count += 1;
+                end++;
+                queue[0][end] = x2;
+                queue[1][end] = y2;
+                queue[2][end] = queue[2][start] + 1;
             }
         }
     }
-    
-    bfs(map, visited, queue, end, end + count);
 }
 
 bool valid_pos(int map[m][n], int visited[m][n], int x, int y)
