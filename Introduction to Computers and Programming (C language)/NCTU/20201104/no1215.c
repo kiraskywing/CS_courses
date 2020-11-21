@@ -9,9 +9,9 @@ int main(void)
     int arr[n];
     for (int i = 0; i < n; i++)
         arr[i] = i + 1;
-
-    helper(arr, 0, n - 1);
     
+    helper(arr, 0, n - 1);
+
     for (int i = 0; i < n; i++)
         printf("%d ", arr[i]);
 
@@ -20,19 +20,19 @@ int main(void)
 
 void helper(int arr[], int start, int end)
 {
-    if (start == end)
+    if (start >= end)
         return;
     
-    int num = (end - start + 1) / 2, left = start, right = start + num, temp;
-    while (num--)
+    int n = (end - start + 1) / 2, temp, i1 = start, i2 = i1 + n;
+    while (n--)
     {
-        temp = arr[left];
-        arr[left] = arr[right];
-        arr[right] = temp;
-        left += 1;
-        right += 1;
+        temp = arr[i1];
+        arr[i1] = arr[i2];
+        arr[i2] = temp;
+        i1++;
+        i2++;
     }
 
-    helper(arr, start, left - 1);
-    helper(arr, left, right - 1);
+    helper(arr, start, i1 - 1);
+    helper(arr, i1, i2 - 1);
 }

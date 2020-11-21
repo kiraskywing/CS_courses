@@ -1,34 +1,24 @@
 #include <stdio.h>
 
-int gcd(int m, int n);
-
 int main(void)
 {
     int m, n, temp;
     scanf("%d %d", &m, &n);
-    
-    if (m < n)
+    if (n > m)
     {
         temp = m;
         m = n;
         n = temp;
     }
-    
-    // int r;
-    // while (n > 0)
-    // {
-    //     r = m % n;
-    //     m = n;
-    //     n = r;
-    // }
 
-    int res = gcd(m, n);
-    printf("%d", res);
-    
+    while (n != 0)
+    {
+        temp = m % n;
+        m = n;
+        n = temp;
+    }
+
+    printf("%d", m);
+
     return 0;
-}
-
-int gcd(int m, int n)
-{
-    return n == 0 ? m : gcd(n, m % n);
 }

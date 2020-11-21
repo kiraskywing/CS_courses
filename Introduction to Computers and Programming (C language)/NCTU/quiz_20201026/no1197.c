@@ -1,13 +1,14 @@
 #include <stdio.h>
 
-int main()
+int main(void)
 {
-    int count = 0, cur = 0, total = 0, max = 0;
+    int cur, count = 0, total = 0, max = 0;
     while (scanf("%d", &cur) != EOF)
     {
-        count += 1;
+        count++;
         total += cur;
-        if (cur > max) max = cur;
+        if (cur > max)
+            max = cur;
     }
     printf("%d %d %d", count, total, max);
 

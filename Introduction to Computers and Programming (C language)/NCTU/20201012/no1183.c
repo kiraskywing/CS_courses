@@ -13,12 +13,7 @@ int main(void)
             printf("NO\n");
             continue;
         }
-        if (n == 2)
-        {
-            printf("YES\n");
-            continue;
-        }
-
+        
         int i;
         for (i = 2; i * i <= n; i++)
         {
