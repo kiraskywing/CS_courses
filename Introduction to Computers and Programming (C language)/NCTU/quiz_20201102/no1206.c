@@ -6,15 +6,15 @@ int main(void)
     int n;
     scanf("%d", &n);
     
-    int pos[2][n];
+    int pos_x[n], pos_y[n];
     for (int i = 0; i < n; i++)
-        scanf("%d %d", &pos[0][i], &pos[1][i]);
+        scanf("%d %d", &pos_x[i], &pos_y[i]);
     
-    int temp = 0;
+    float res;
     for (int i = 0; i < n; i++)
-        temp += ((pos[0][i] * pos[1][(i + 1) % n]) - (pos[1][i] * pos[0][(i + 1) % n]));
-
-    printf("%.1f", fabs(temp / 2.0));
+        res += pos_x[i] * pos_y[(i + 1) % n] - pos_x[(i + 1) % n] * pos_y[i];
+    
+    printf("%.1f", fabs(res) / 2.0);
 
     return 0;
 }

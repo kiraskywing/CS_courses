@@ -1,50 +1,45 @@
 #include <stdio.h>
 
-void init(int temp[], int visited[], int n);
-void helper(int temp[], int visited[], int n, int count);
+void dfs(int visited[], int n, int start, int temp[], int used);
 
 int main(void)
 {
-    int times, n;
+    int times;
     scanf("%d", &times);
+
     while (times--)
     {
+        int n;
         scanf("%d", &n);
-        int count = 0, temp[n], visited[n];
-        init(temp, visited, n);
-        helper(temp, visited, n, count);
-    }
+        int visited[n + 1], temp[n];
+        for (int i = 1; i <= n; i++)
+            visited[i] = 0;
 
+        dfs(visited, n, 1, temp, 0);
+    }
+    
     return 0;
 }
 
-void init(int temp[], int visited[], int n)
+void dfs(int visited[], int n, int start, int temp[], int used)
 {
-    for (int i = 0; i < n; i++)
-    {
-        temp[i] = 0;
-        visited[i] = 0;
-    }
-}
-
-void helper(int temp[], int visited[], int n, int count)
-{
-    if (count == n)
+    if (used == n)
     {
         for (int i = 0; i < n; i++)
             printf("%d", temp[i]);
         printf("\n");
+        return;
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = start; i <= n; i++)
     {
-        if (visited[i] != 1)
+        if (visited[i] == 0)
         {
             visited[i] = 1;
-            temp[count] = i + 1;
-            helper(temp, visited, n, count + 1);
-            temp[count] = 0;
+            temp[used] = i;
+            dfs(visited, n, 1, temp, used + 1);
             visited[i] = 0;
+            temp[used] = 0;
         }
     }
 }

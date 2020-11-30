@@ -2,46 +2,45 @@
 
 int main(void)
 {
-    int m, n;
-    scanf("%d %d", &m, &n);
-    
-    int arr[m][n], pos[2][m * n], count = 0;
-    for (int i = 0; i < m; i++)
+    int row, col;
+    scanf("%d %d", &row, &col);
+    int mat[row][col], pos_x[row * col], pos_y[row * col], count = 0;
+    for (int i = 0; i < row; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < col; j++)
         {
-            scanf("%d", &arr[i][j]);
-            if (arr[i][j] == 1)
+            scanf("%d", &mat[i][j]);
+            if (mat[i][j] == 1)
             {
-                pos[0][count] = i;
-                pos[1][count] = j;
+                pos_x[count] = i;
+                pos_y[count] = j;
                 count++;
             }
         }
     }
 
     int x_low, y_low, x_high, y_high;
-    for (int k = 0; k < count; k++)
+    for (int i = 0; i < count; i++)
     {
-        x_low = (pos[0][k] - 1 >= 0 ? pos[0][k] - 1 : 0);
-        y_low = (pos[1][k] - 1 >= 0 ? pos[1][k] - 1 : 0);
-        x_high = (pos[0][k] + 1 < m ? pos[0][k] + 1 : m - 1);
-        y_high = (pos[1][k] + 1 < n ? pos[1][k] + 1 : n - 1);
+        x_low = (pos_x[i] - 1 >= 0 ? pos_x[i] - 1 : 0);
+        y_low = (pos_y[i] - 1 >= 0 ? pos_y[i] - 1 : 0);
+        x_high = (pos_x[i] + 1 <= row - 1 ? pos_x[i] + 1 : row - 1);
+        y_high = (pos_y[i] + 1 <= col - 1 ? pos_y[i] + 1 : col - 1);
 
-        for (int i = x_low; i <= x_high; i++)
+        for (int x = x_low; x <= x_high; x++)
         {
-            for (int j = y_low; j <= y_high; j++)
-                arr[i][j] += 1;
+            for (int y = y_low; y <= y_high; y++)
+                mat[x][y]++;
         }
     }
 
-    for (int k = 0; k < count; k++)
-        arr[pos[0][k]][pos[1][k]] = -1;
+    for (int i = 0; i < count; i++)
+        mat[pos_x[i]][pos_y[i]] = -1;
     
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < row; i++)
     {
-        for (int j = 0; j < n; j++)
-            printf("%d ", arr[i][j]);
+        for (int j = 0; j < col; j++)
+            printf("%d ", mat[i][j]);
         printf("\n");
     }
 

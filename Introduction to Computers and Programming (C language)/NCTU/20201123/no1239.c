@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void helper(int map[], int row, int n);
-bool pos_valid(int map[], int row, int col);
+void helper(int cur_row, int len, int res[]);
+bool is_valid(int cur_col, int cur_row, int res[]);
 
 int main(void)
 {
@@ -11,50 +11,43 @@ int main(void)
 
     while (times--)
     {
-        int n;
-        scanf("%d", &n);
-        int map[n];
-        for (int i = 0; i < n; i++)
-            map[i] = 0;
-        
-        helper(map, 0, n);
+        int len;
+        scanf("%d", &len);
+        int res[len];
+        helper(0, len, res);
     }
-
+    
     return 0;
 }
 
-void helper(int map[], int row, int n)
+void helper(int cur_row, int len, int res[])
 {
-    if (row == n)
+    if (cur_row == len)
     {
-        for (int i = 0; i < row; i++)
-            printf("%d ", map[i] + 1);
+        for (int i = 0; i < len; i++)
+            printf("%d ", res[i] + 1);
         printf("\n");
         return;
     }
 
-    for (int j = 0; j < n; j++)
+    for (int cur_col = 0; cur_col < len; cur_col++)
     {
-        if (pos_valid(map, row, j))
+        if (is_valid(cur_col, cur_row, res))
         {
-            map[row] = j;
-            helper(map, row + 1, n);
+            res[cur_row] = cur_col;
+            helper(cur_row + 1, len, res);
         }
     }
 }
 
-bool pos_valid(int map[], int row, int col)
+bool is_valid(int cur_col, int cur_row, int res[])
 {
-    if (row == 0)
-        return true;
-    else
+    int pre_col;
+    for (int pre_row = 0; pre_row < cur_row; pre_row++)
     {
-        for (int i = 0; i < row; i++)
-        {
-            int x = i, y = map[i];
-            if (col == y || (col - y) == (row - x) || (col - y) == (x - row))
-                return false;
-        }
+        pre_col = res[pre_row];
+        if (cur_col == pre_col || (cur_col - pre_col) == (cur_row - pre_row) || (cur_col - pre_col) == (pre_row - cur_row))
+            return false;
     }
     return true;
 }

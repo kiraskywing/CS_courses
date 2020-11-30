@@ -1,12 +1,6 @@
 #include <stdio.h>
-#define LEN 9
 
-int dic[LEN] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-int visited[LEN];
-int low, high, digits;
-
-void init(void);
-void helper(int start, int value, int used);
+void helper(int cur, int start, int low, int high, int digits[], int head);
 
 int main(void)
 {
@@ -15,47 +9,30 @@ int main(void)
 
     while (times--)
     {
+        int low, high, digits[10] = {0};
         scanf("%d %d", &low, &high);
-        
-        init();
-        helper(0, 0, 0);
+        helper(0, 1, low, high, digits, 0);
         printf("\n");
     }
 
     return 0;
 }
 
-void init(void)
+void helper(int cur, int start, int low, int high, int digits[], int head)
 {
-    digits = 0;
-    int temp = high;
-    while (temp)
-    {
-        digits++;
-        temp /= 10;
-    }
-    
-    for (int i = 0; i < LEN; i++)
-        visited[i] = 0;
-}
+    if (cur >= low && cur <= high)
+        printf("%d ", cur);
 
-void helper(int start, int value, int used)
-{
-    if (value >= low && value <= high)
-        printf("%d ", value);
-    if (value > high || used > digits || start == LEN)
+    if (cur > high || start == 10 || (head == 1 && digits[start - 1] == 0))
         return;
     
-
-    for (int i = start; i < LEN; i++)
+    for (int i = start; i < 10; i++)
     {
-        if (visited[i] == 0 && (used == 0 || visited[i - 1] == 1))
+        if (head == 0 || (digits[i - 1] == 1 && digits[i] == 0))
         {
-            visited[i] = 1;
-            helper(i + 1, value * 10 + dic[i], used + 1);
-            visited[i] = 0;
+            digits[i] = 1;
+            helper(cur * 10 + i, i + 1, low, high, digits, 1);
+            digits[i] = 0;
         }
-        else
-            break;
     }
 }
