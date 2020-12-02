@@ -1,60 +1,62 @@
 #include <stdio.h>
 
-long long mat[10][10];
-long long mod = 100000007;
-int n;
-
-long long solve(int A[], int B[], int n);
+int mod = 100000007;
+long long helper(int mat[10][10], int cur_rows[], int row_visited[], int n, int col_index);
 
 int main(void)
 {
+    int n;
     while (scanf("%d", &n) != EOF)
     {
+        int mat[10][10];
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
-                scanf("%lld", &mat[i][j]);
+                scanf("%d", &mat[i][j]);
         }
 
-        int A[n], B[n];  // A: record row index, B: record col index
+        int cur_rows[n], row_visited[n];
         for (int i = 0; i < n; i++)
-            A[i] = B[i] = i;
-        
-        long long ans = solve(A, B, n);
-        if (ans < 0)
-            ans += mod;
-        printf("%lld\n", ans);
+        {
+            cur_rows[i] = i;
+            row_visited[i] = 0;
+        }
+
+        long long res = helper(mat, cur_rows, row_visited, n, 0);
+        if (res < 0)
+            res += mod;
+        printf("%lld\n", res);
     }
 
     return 0;
 }
 
-long long solve(int A[], int B[], int n)
+long long helper(int mat[10][10], int cur_rows[], int row_visited[], int n, int col_index)
 {
-    if (n == 1)
-        return mat[A[0]][B[0]];
-    
-    long long res = 0;
-    int sub_A[n - 1], sub_B[n - 1];
+    if (col_index == n - 1)
+        return mat[cur_rows[0]][col_index];
 
-    for (int i = 0; i < n - 1; i++) // record sub col index
-        sub_B[i] = B[i + 1];
-    
-    for (int i = 0; i < n; i++) // scan current row index
+    long long res = 0;
+    for (int i = 0; i < n - col_index; i++)    // get current rows
     {
-        for (int j = 0; j < n; j++) // record sub row index (pass i == j)
+        int row = cur_rows[i];
+        row_visited[row] = 1;                  // record currently used row
+
+        int next_rows[n], len = 0;
+        for (int j = 0; j < n; j++)            // pass not used rows
         {
-            if (i > j)
-                sub_A[j] = A[j];
-            else if (i < j)
-                sub_A[j - 1] = A[j];
+            if (row_visited[j] == 0)
+                next_rows[len++] = j;
         }
 
-        long long sub_res = solve(sub_A, sub_B, n - 1);
+        long long sub_res = helper(mat, next_rows, row_visited, n, col_index + 1);
         if (i % 2 != 0)
             sub_res = -sub_res;
-        res += sub_res * mat[A[i]][B[0]];
+
+        res += mat[row][col_index] * sub_res;
         res %= mod;
+        
+        row_visited[row] = 0;
     }
 
     return res;
