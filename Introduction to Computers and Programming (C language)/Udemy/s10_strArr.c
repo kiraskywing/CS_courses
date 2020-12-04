@@ -4,7 +4,7 @@
 
 int stringLength(const char string[]);
 void concat(char result[], const char str[], const char str1[]);
-bool equalStrings(const char s1[], const char s2[]);
+bool equalStrings(const char *s1, const char *s2);
 
 int main(void)
 {
@@ -29,7 +29,7 @@ int stringLength(const char string[])
     int count = 0;
 
     while (string[count] != '\0')
-        count += 1;
+        count++;
 
     return count;
 }
@@ -41,19 +41,19 @@ void concat(char result[], const char str1[], const char str2[])
     for (i = 0; str1[i] != '\0'; ++i)
         result[i] = str1[i];
     
-    for ( j = 0;  str2[j] != '\0'; ++j)
+    for (j = 0; str2[j] != '\0'; ++j)
         result[i + j] = str2[j];
 
     result[i + j] = '\0';
 }
 
-bool equalStrings(const char s1[], const char s2[])
+bool equalStrings(const char *s1, const char *s2)
 {
     int i = 0;
-    while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
-        ++i;
+    while (*(s1 + i) == *(s2 + i) && *(s1 + i) != '\0' && *(s2 + i) != '\0')
+        i++;
 
-    if (s1[i] == '\0' && s2[i] == '\0')
-       return true;
+    if (*(s1 + i) == '\0' && *(s2 +i) == '\0')
+        return true;
     return false;
 }

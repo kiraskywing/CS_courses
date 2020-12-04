@@ -21,7 +21,7 @@ int main(void)
 
 void copyString(char *from, char *to)
 {
-    while (*from)
+    while (*from != '\0')
         *to++ = *from++;
     
     *to = '\0';
@@ -31,7 +31,7 @@ int stringLength(const char *string)
 {
     const char *lastAddress = string;
 
-    while (*lastAddress)
+    while (*lastAddress != '\0')
         ++lastAddress;
 
     return lastAddress - string;

@@ -41,8 +41,8 @@ int main(void)
             if (strcmp(name[j], name[j + 1]) > 0)
             {
                 strncpy(temp, name[j], sizeof(temp) - 1);
-                strncpy(name[j], name[j+1], sizeof(name[j]) - 1);
-                strncpy(name[j + 1],temp, sizeof(name[j + 1]) - 1);
+                strncpy(name[j], name[j + 1], sizeof(name[j]) - 1);
+                strncpy(name[j + 1], temp, sizeof(name[j + 1]) - 1);
             }
         }
     }

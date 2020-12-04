@@ -11,7 +11,7 @@ int main(void)
     printf("count = %d\n", count);
     printf("The address of count: %p\n", &count);
     printf("The address of pInt pointing to: %p\n", pInt);
-    printf("The address of pInt itself: %p\n", (void*)&pInt);
+    printf("The address of pInt itself: %p\n", &pInt);
     printf("pInt's size: %zd bytes\n", sizeof(pInt));
     printf("The value pInt pointing to: %d\n", *pInt);
 
