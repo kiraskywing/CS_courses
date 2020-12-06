@@ -13,7 +13,7 @@ int main(void)
     while (times--)
     {
         int n;
-        char string[50];
+        char string[1000];
         scanf("%d %s", &n, string);
 
         if (n == 4)
@@ -85,7 +85,7 @@ void judge_v6(char string[])
         
         else
         {
-            if (!isalnum(string[i]))
+            if (!isalnum(string[i]) || (isalpha(string[i]) && (tolower(string[i]) - 'a' > 'f' - 'a')))
             {
                 printf("QAQ\n");
                 return;
