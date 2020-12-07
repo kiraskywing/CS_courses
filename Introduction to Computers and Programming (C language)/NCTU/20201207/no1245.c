@@ -21,36 +21,38 @@ int main(void)
         if (n == 6)
             judge_v6(string);
     }
-    
+
     return 0;
 }
 
 void judge_v4(char string[])
 {
     int punct_n = 3, s_len = strlen(string);
-    int num = 0, num_check = 0;
+    int num = 0, num_check = 0, num_len = 3;
 
     for (int i = 0; i < s_len; i++)
     {
         if (ispunct(string[i]))
         {
-            if (!num_check || (punct_n == 3 && num == 0) || punct_n == 0 || string[i] != '.')
+            if (num_len == 3 || punct_n == 0 || string[i] != '.')
             {
                 printf("QAQ\n");
                 return;
             }
-            num = num_check = 0;
+            num = 0;
+            num_len = 3;
             punct_n--;
         }
-        
+
         else
         {
-            if (!isdigit(string[i]))
+            if (!isdigit(string[i]) || (num_len < 3 && num == 0))
             {
                 printf("QAQ\n");
                 return;
             }
-            num_check = 1;
+            
+            num_len--;
             num = 10 * num + string[i] - '0';
             if (num > 255)
             {
@@ -72,17 +74,16 @@ void judge_v6(char string[])
     {
         if (ispunct(string[i]))
         {
-            if (!num_check || punct_n == 0 || string[i] != ':')
+            if (num_len == 4 || punct_n == 0 || string[i] != ':')
             {
                 printf("QAQ\n");
                 return;
             }
-            
+
             num_len = 4;
-            num_check = 0;
             punct_n--;
         }
-        
+
         else
         {
             if (!isalnum(string[i]) || (isalpha(string[i]) && (tolower(string[i]) - 'a' > 'f' - 'a')))
@@ -91,7 +92,6 @@ void judge_v6(char string[])
                 return;
             }
 
-            num_check = 1;
             num_len--;
             if (num_len < 0)
             {

@@ -69,10 +69,5 @@ void sub(char strings[][LEN], int a, int b)
 
 void eq(char strings[][LEN], int a, int b)
 {
-    // printf("%s\n", strcmp(strings[a], strings[b]) != 0 ? "same" : "different");
-    int i = 0;
-    while (strings[a][i] != '\0' && strings[b][i] != '\0' && strings[a][i] == strings[b][i])
-        i++;
-    
-    printf("%s\n", strings[a][i] == strings[b][i] ? "same" : "different");
+    printf("%s\n", strcmp(strings[a], strings[b]) == 0 ? "same" : "different");
 }
