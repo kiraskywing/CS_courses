@@ -5,13 +5,15 @@ int main(void)
 {
     char str[80] = "Hello how are you - my name is - Charles";
     const char s[] = " ";  
+    char res[80] = "";
     char *token = NULL;
 
     token = strtok(str, s);
 
     while (token != NULL)
     {
-        printf("%s\n", token);
+        strncat(res, token, sizeof(res) - strlen(res) - 1);
+        printf("%s\n", res);
         token = strtok(NULL, s);
     }
 
