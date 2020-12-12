@@ -27,8 +27,8 @@ int main(void)
 
 void judge_v4(char string[])
 {
-    int punct_n = 3, s_len = strlen(string);
-    int num = 0, num_check = 0, num_len = 3;
+    int s_len = strlen(string);
+    int num = 0, punct_n = 3, num_len = 3;
 
     for (int i = 0; i < s_len; i++)
     {
@@ -67,8 +67,8 @@ void judge_v4(char string[])
 
 void judge_v6(char string[])
 {
-    int punct_n = 7, s_len = strlen(string);
-    int num_len = 4, num_check = 0;
+    int s_len = strlen(string);
+    int punct_n = 7, num_len = 4;
 
     for (int i = 0; i < s_len; i++)
     {

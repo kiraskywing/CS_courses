@@ -3,71 +3,72 @@
 
 #define LEN 202
 
-int valid_check(char order[]);
-void add(char strings[][LEN], int a, int b);
-void sub(char strings[][LEN], int a, int b);
-void eq(char strings[][LEN], int a, int b);
+int order_judge(char order[]);
+void add(char s1[], char s2[]);
+void sub(char s1[], char s2[]);
+void eq(char s1[], char s2[]);
 
 int main(void)
 {
     int n;
     scanf("%d", &n);
-    char strings[n][LEN];
+    char strings[n][LEN], order[LEN];
 
     for (int i = 0; i < n; i++)
         scanf("%s", strings[i]);
-
-    char order[LEN];
+    
     int a, b;
-    while ((scanf("%s %d %d", order, &a, &b) != EOF))
+    while (scanf("%s %d %d", order, &a, &b) != EOF)
     {
-        if (valid_check(order) == 0)
+        int order_number = order_judge(order);
+        if (order_number == 1)
+            add(strings[a], strings[b]);
+        else if (order_number == 2)
+            sub(strings[a], strings[b]);
+        else if (order_number == 3)
+            eq(strings[a], strings[b]);
+        else
             printf("Oops\n");
-        else if (valid_check(order) == 1)
-            add(strings, a, b);
-        else if (valid_check(order) == 2)
-            sub(strings, a, b);
-        else if (valid_check(order) == 3)
-            eq(strings, a, b);
     }
     
     return 0;
 }
 
-int valid_check(char order[])
+int order_judge(char order[])
 {
     if (strcmp(order, "add") == 0)
         return 1;
-    if (strcmp(order, "sub") == 0)
+    else if (strcmp(order, "sub") == 0)
         return 2;
-    if (strcmp(order, "eq") == 0)
+    else if (strcmp(order, "eq") == 0)
         return 3;
     return 0;
 }
 
-void add(char strings[][LEN], int a, int b)
+void add(char s1[], char s2[])
 {
-    strcat(strings[a], strings[b]);
-    printf("%s\n", strings[a]);
+    strcat(s1, s2);
+    printf("%s\n", s1);
 }
 
-void sub(char strings[][LEN], int a, int b)
+void sub(char s1[], char s2[])
 {
-    char temp[LEN], ch = strings[b][0];
-    int i = 0, j = 0;
-    while (strings[a][i] != '\0')
+    char temp[LEN] = "", c = s2[0], *p;
+    int i = 0;
+    p = s1;
+    while (*p != '\0')
     {
-        if (strings[a][i] != ch)
-            temp[j++] = strings[a][i];
-        i++;
+        if (*p != c)
+            temp[i++] = *p;
+        p++;
     }
-    
-    temp[j] = '\0';
-    strcpy(strings[a], temp);
-    printf("%s\n", strings[a]);
+    temp[i] = '\0';
+
+    strcpy(s1, temp);
+    printf("%s\n", s1);
 }
 
-void eq(char strings[][LEN], int a, int b)
+void eq(char s1[], char s2[])
 {
-    printf("%s\n", strcmp(strings[a], strings[b]) == 0 ? "same" : "different");
+    printf("%s\n", strcmp(s1, s2) == 0 ? "same" : "different");
 }
