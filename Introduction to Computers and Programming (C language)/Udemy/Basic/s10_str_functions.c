@@ -10,7 +10,6 @@ int main(void)
     // Copying strings
     char myString2[] = "My name is YCLin";    // 16 + 1 characters
     char temp[10];
-
     strncpy(temp, myString2, sizeof(temp) - 1);    //keep one space for '\0'
     printf("The length of myString is %lu\n", strlen(myString2));
     printf("The size of temp is %lu\n", sizeof(temp) / sizeof(temp[0]));
@@ -19,9 +18,8 @@ int main(void)
 
     // String concatenation
     char src[50], dest[50];
-    strncpy(src, "This is source", sizeof(src) - 1);
+    strncpy(src, "This is source", sizeof(src) - 1);    //keep one space for '\0'
     strncpy(dest, "This is the destination", sizeof(dest) - 1);
-
     printf("src string: |%s|\n", src);
     printf("dest string: |%s|\n", dest);
     strncat(dest, src, 8);
