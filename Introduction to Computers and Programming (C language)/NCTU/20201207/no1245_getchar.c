@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <stdbool.h>
 
-void judge_v4(void);
-void judge_v6(void);
+bool judge_v4(void);
+bool judge_v6(void);
 void clear(void);
 
 int main(void)
@@ -14,16 +15,14 @@ int main(void)
     {
         scanf("%d", &type);
         getchar();
-        if (type == 4)
-            judge_v4();
-        if (type == 6)
-            judge_v6();
+        bool valid = (type == 4 ? judge_v4() : judge_v6());
+        printf("%s\n", valid ? "Valid IP" : "QAQ");
     }
     
     return 0;
 }
 
-void judge_v4(void)
+bool judge_v4(void)
 {
     char c;
     int num = 0, digit_len = 3, punct_len = 3;
@@ -33,9 +32,8 @@ void judge_v4(void)
         {
             if (c != '.' || digit_len == 3 || punct_len == 0)
             {
-                printf("QAQ\n");
                 clear();
-                return;
+                return false;
             }
             punct_len--;
             digit_len = 3;
@@ -45,31 +43,28 @@ void judge_v4(void)
         {
             if (digit_len < 3 && num == 0)
             {
-                printf("QAQ\n");
                 clear();
-                return;
+                return false;
             }
             num = num * 10 + c - '0';
             digit_len--;
             if (num > 255)
             {
-                printf("QAQ\n");
                 clear();
-                return;
+                return false;
             }
         }
         else
         {
-            printf("QAQ\n");
             clear();
-            return;
+            return false;
         }
     }
     
-    printf("Valid IP\n");
+    return true;
 }
 
-void judge_v6(void)
+bool judge_v6(void)
 {
     char c;
     int digit_len = 4, punct_len = 7;
@@ -79,9 +74,8 @@ void judge_v6(void)
         {
             if (c != ':' || digit_len == 4 || punct_len == 0)
             {
-                printf("QAQ\n");
                 clear();
-                return;
+                return false;
             }
             punct_len--;
             digit_len = 4;
@@ -90,27 +84,24 @@ void judge_v6(void)
         {
             if (isalpha(c) && ((tolower(c) - 'a') > 'f' - 'a'))
             {
-                printf("QAQ\n");
                 clear();
-                return;
+                return false;
             }
             digit_len--;
             if (digit_len < 0)
             {
-                printf("QAQ\n");
                 clear();
-                return;
+                return false;
             }
         }
         else
         {
-            printf("QAQ\n");
             clear();
-            return;
+            return false;
         }
     }
     
-    printf("Valid IP\n");
+    return true;
 }
 
 void clear(void)
