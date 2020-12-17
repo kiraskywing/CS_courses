@@ -7,6 +7,8 @@ int straight_flush(int *c_A, int *p_A, int *c_B, int *p_B);
 int flush(int *color, int *point);
 int straight(int *point);
 int four_a_kind(int *c_A, int *p_A, int *c_B, int *p_B);
+int full_house(int *c_A, int *p_A, int *c_B, int *p_B);
+int three_a_kind(int *c_A, int *p_A, int *c_B, int *p_B);
 
 int main(void)
 {
@@ -23,6 +25,22 @@ int main(void)
 
         if (temp = straight_flush(Acolor, Apoint, Bcolor, Bpoint));
         else if (temp = four_a_kind(Acolor, Apoint, Bcolor, Bpoint));
+        else if (temp = full_house(Acolor, Apoint, Bcolor, Bpoint));
+        else if (temp = flush(Acolor, Apoint) - flush(Bcolor, Bpoint));
+        else if (straight(Apoint) || straight(Bpoint))
+        {
+            temp = straight(Apoint) - straight(Bpoint);
+            if (!temp)
+                for (int i = 0; i < 5; i++)
+                {
+                    if (Acolor[i] != Bcolor[i])
+                    {
+                        temp = Acolor[i] - Bcolor[i];
+                        break;
+                    }
+                }
+        }
+        else if (temp = three_a_kind(Acolor, Apoint, Bcolor, Bpoint));
 
         if (temp > 0) puts("Wins");
         else puts("Lose");
@@ -71,16 +89,26 @@ void card_read_sort(int *color, int *point)
 
 int straight_flush(int *c_A, int *p_A, int *c_B, int *p_B)
 {
-    int res_f_a = flush(c_A, p_A), res_s_a = straight(p_A), res_a = 0;
-    int res_f_b = flush(c_B, p_B), res_s_b = straight(p_B), res_b = 0;
-    if (res_f_a != 0 && res_s_a != 0)
-        res_a = res_s_a;
-    if (res_f_b != 0 && res_s_b != 0)
-        res_b = res_s_b;
-
+    int res_a = 0, res_b = 0;
+    if (c_A[0] == c_A[1] && c_A[1] == c_A[2] && c_A[2] == c_A[3] && c_A[3] == c_A[4])
+        res_a = straight(p_A);
+    if (c_B[0] == c_B[1] && c_B[1] == c_B[2] && c_B[2] == c_B[3] && c_B[3] == c_B[4])
+        res_b = straight(p_B);
+    
     if (res_a != 0 && res_b != 0 && res_a == res_b)
         return c_A[0] - c_B[0];
     return res_a - res_b;
+}
+int straight(int *point)
+{
+    if (point[0] == 14 && point[1] == 5 && point[2] == 4 && point[3] == 3 && point[4] == 2)
+        return 5;
+    for (int i = 0; i < 4; i++)
+    {
+        if (point[i] - point[i + 1] != 1)
+            return 0;
+    }
+    return point[0];
 }
 
 int flush(int *color, int *point)
@@ -93,17 +121,6 @@ int flush(int *color, int *point)
     return point[0] * 100000000 + point[1] * 1000000 + point[2] * 10000 + point[3] * 100 + point[4];
 }
 
-int straight(int *point)
-{
-    if (point[0] == 14 && point[1] == 5 && point[2] == 4 && point[3] == 3 && point[4] == 2)
-        return 5;
-    for (int i = 0; i < 4; i++)
-    {
-        if (point[i] - point[i + 1] != 1)
-            return 0;
-    }
-    return point[0];
-}
 
 int four_a_kind(int *c_A, int *p_A, int *c_B, int *p_B)
 {
@@ -129,6 +146,78 @@ int four_a_kind(int *c_A, int *p_A, int *c_B, int *p_B)
     {
         res_b = p_B[1];
         j = 1;
+    }
+
+    if (res_a != 0 && res_b != 0 && res_a == res_b)
+        return c_A[i] - c_B[j];
+    return res_a - res_b; 
+}
+
+int full_house(int *c_A, int *p_A, int *c_B, int *p_B)
+{
+    int res_a = 0, res_b = 0, i, j;
+
+    if (p_A[0] == p_A[1] && p_A[1] == p_A[2] && p_A[3] == p_A[4])
+    {
+        res_a = p_A[0];
+        i = 0;
+    }
+    if (p_A[0] == p_A[1] && p_A[2] == p_A[3] && p_A[3] == p_A[4])
+    {
+        res_a = p_A[2];
+        i = 2;
+    }
+    
+    if (p_B[0] == p_B[1] && p_B[1] == p_B[2] && p_B[3] == p_B[4])
+    {
+        res_b = p_B[0];
+        j = 0;
+    }
+    if (p_B[0] == p_B[1] && p_B[2] == p_B[3] && p_B[3] == p_B[4])
+    {
+        res_b = p_B[2];
+        j = 2;
+    }
+
+    if (res_a != 0 && res_b != 0 && res_a == res_b)
+        return c_A[i] - c_B[j];
+    return res_a - res_b; 
+}
+
+int three_a_kind(int *c_A, int *p_A, int *c_B, int *p_B)
+{
+    int res_a = 0, res_b = 0, i, j;
+
+    if (p_A[0] == p_A[1] && p_A[1] == p_A[2])
+    {
+        res_a = p_A[0];
+        i = 0;
+    }
+    if (p_A[1] == p_A[2] && p_A[2] == p_A[3])
+    {
+        res_a = p_A[1];
+        i = 1;
+    }
+    if (p_A[2] == p_A[3] && p_A[3] == p_A[4])
+    {
+        res_a = p_A[2];
+        i = 2;
+    }
+    
+    if (p_B[0] == p_B[1] && p_B[1] == p_B[2])
+    {
+        res_b = p_B[0];
+        j = 0;
+    }
+    if (p_B[1] == p_B[2] && p_B[2] == p_B[3])
+    {
+        res_b = p_B[1];
+        j = 1;
+    }
+    if (p_B[2] == p_B[3] && p_B[3] == p_B[4])
+    {
+        res_b = p_B[2];
+        j = 2;
     }
 
     if (res_a != 0 && res_b != 0 && res_a == res_b)
