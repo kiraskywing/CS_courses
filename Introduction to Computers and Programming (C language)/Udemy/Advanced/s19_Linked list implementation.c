@@ -100,8 +100,7 @@ void insertNodeAtTheBeginning(void)
     if (!head)
     {
         head = tail = newnode;
-        head->next = NULL;
-        tail->next = NULL;
+        head->next = tail->next = NULL;
     }
     else
     {
@@ -124,8 +123,7 @@ void insertNodeAtTheEnd(void)
     if (!tail)
     {
         head = tail = newnode;
-        head->next = NULL;
-        tail->next = NULL;
+        head->next = tail->next = NULL;
     }
     else
     {
@@ -183,7 +181,7 @@ void deletePosition(void)
 
     if (!head)
     {
-        puts("List is empy");
+        puts("List is empty");
         return;
     }
     
@@ -275,7 +273,7 @@ void display(void)
         puts("List is empty");
         return;
     }
-    for (cur = head; cur; cur = cur -> next)
-        printf("%d ", cur -> value);
+    for (cur = head; cur; cur = cur->next)
+        printf("%d ", cur->value);
     puts("");
 }
