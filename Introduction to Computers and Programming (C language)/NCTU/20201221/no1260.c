@@ -1,43 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* create(int len);
-void clear_ptrs(int *ptr[], int n);
+void clear_list(int *list[], int n);
 
 int main(void)
 {
-    int n, len;
+    int n, k;
     scanf("%d", &n);
-    int *ptr[n];
+    int *list[n];
     for (int i = 0; i < n; i++)
     {
-        scanf("%d", &len);
-        ptr[i] = create(len);
+        scanf("%d", &k);
+        list[i] = (int*) malloc(sizeof(int) * k);
+        for (int j = 0; j < k; j++)
+            scanf("%d", &list[i][j]);
     }
 
-    int times, i_1, i_2;
+    int times, i, j;
     scanf("%d", &times);
     while (times--)
     {
-        scanf("%d %d", &i_1, &i_2);
-        printf("%d\n", *(ptr[i_1] + i_2));
+        scanf("%d %d", &i, &j);
+        printf("%d\n", list[i][j]);
     }
 
-    clear_ptrs(ptr, n);
+    clear_list(list, n);
 
     return 0;
 }
 
-int* create(int len)
-{
-    int *p = (int *) malloc(len * sizeof(int));
-    for (int i = 0; i < len; i++)
-        scanf("%d", p + i);
-    return p;
-}
-
-void clear_ptrs(int *ptr[], int n)
+void clear_list(int *list[], int n)
 {
     for (int i = 0; i < n; i++)
-        free(ptr[i]);
+        free(list[i]);
 }

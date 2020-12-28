@@ -1,95 +1,86 @@
-/*
-建立一個pointer array儲存每個item的address
-使用qsort的時候, 是交換item的address, 不用搬動struct內的element
-理論上會比較有效率?
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct item
+struct Item
 {
-    int rank, price;
     char name[11];
+    int rank, price;
 };
 
-void init_list(struct item *list[], int n);
-int buy(struct item *list[], int n, int budget, char res[][11], int *count);
-int rank_cmp(const void *a, const void *b);
-int name_cmp(const void *a, const void *b);
-void clear_ptrs(struct item *list[], int n);
+void list_to_buy(struct Item *items[], int n);
+int cmp_rank(const void *a, const void *b);
+int buy(struct Item *items[], char res[][11], int n, int budget, int *count);
+int cmp_name(const void *a, const void *b);
+void clear_items(struct Item *items[], int n);
 
 int main(void)
 {
-    int times, budget, n;
+    int times;
     scanf("%d", &times);
 
     while (times--)
     {
+        int budget, n;
         scanf("%d %d", &budget, &n);
+        struct Item *items[n];
         
-        struct item *list[n];
-        init_list(list, n);
-        qsort(list, n, sizeof(struct item*), rank_cmp);
-        
+        list_to_buy(items, n);
+        qsort(items, n, sizeof(struct Item*), cmp_rank);
+
         char res[n][11];
         int count = 0;
-        int spent = buy(list, n, budget, res, &count);
-        qsort(res, count, sizeof(char) * 11, name_cmp);
-        
+        int spent = buy(items, res, n, budget, &count);
+
+        qsort(res, count, sizeof(char) * 11, cmp_name);
+
         printf("%d ", spent);
         for (int i = 0; i < count; i++)
             printf("%s ", res[i]);
         puts("");
 
-        clear_ptrs(list, n);
+        clear_items(items, n);
     }
-
+    
     return 0;
 }
 
-void init_list(struct item *list[], int n)
+void list_to_buy(struct Item *items[], int n)
 {
     for (int i = 0; i < n; i++)
     {
-        struct item *new = (struct item*) malloc(sizeof(struct item));
-        scanf("%d %d %s", &new->rank, &new->price, new->name);
-        list[i] = new;
+        items[i] = (struct Item*) malloc(sizeof(struct Item));
+        scanf("%d %d %s", &items[i]->rank, &items[i]->price, items[i]->name);
     }
 }
 
-int buy(struct item *list[], int n, int budget, char res[][11], int *count)
+int cmp_rank(const void *a, const void *b)
+{
+    return (*(struct Item**)b)->rank - (*(struct Item**)a)->rank;
+}
+
+int buy(struct Item *items[], char res[][11], int n, int budget, int *count)
 {
     int remain = budget;
     for (int i = 0; i < n; i++)
     {
-        if (remain >= list[i]->price)
+        if (remain >= items[i]->price)
         {
-            strcpy(res[*count], list[i]->name);
-            (*count)++;
-            remain -= list[i]->price;
+            remain -= items[i]->price;
+            strcpy(res[(*count)++], items[i]->name);
         }
     }
+
     return budget - remain;
 }
 
-int rank_cmp(const void *a, const void *b)    // 這裡type轉換要處理好
+int cmp_name(const void *a, const void *b)
 {
-    struct item **x = (struct item**) a;      // Origin: de-ref array address -> access array element 
-    struct item **y = (struct item**) b;      // Here: de-ref array address -> access the address of struct 
-    return (*y)->rank - (*x)->rank;           //       de-ref the address of struct -> access struct
-}                                             //       thus, we need to use double pointer
-
-int name_cmp(const void *a, const void *b)
-{
-    char *x = (char*) a;
-    char *y = (char*) b;
-    return strcmp(x, y);
+    return strcmp(a, b);
 }
 
-void clear_ptrs(struct item *list[], int n)
+void clear_items(struct Item *items[], int n)
 {
     for (int i = 0; i < n; i++)
-        free(list[i]);
+        free(items[i]);
 }
