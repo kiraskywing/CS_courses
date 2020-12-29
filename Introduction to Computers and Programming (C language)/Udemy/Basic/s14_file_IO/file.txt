@@ -1,2 +1,0 @@
-Hello world!
-This is going to override previous content.
