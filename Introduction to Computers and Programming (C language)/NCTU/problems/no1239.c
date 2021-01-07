@@ -1,52 +1,47 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void helper(int cur_row, int len, int res[]);
-bool is_valid(int cur_col, int cur_row, int res[]);
+void helper(int cols[], int row, int n);
+bool valid_pos(int cols[], int row, int col);
 
 int main(void)
 {
-    int times;
+    int times, n;
     scanf("%d", &times);
-
     while (times--)
     {
-        int len;
-        scanf("%d", &len);
-        int res[len];
-        helper(0, len, res);
+        scanf("%d", &n);
+        int cols[n];
+        helper(cols, 0, n);
     }
     
     return 0;
 }
 
-void helper(int cur_row, int len, int res[])
+void helper(int cols[], int row, int n)
 {
-    if (cur_row == len)
+    if (row == n)
     {
-        for (int i = 0; i < len; i++)
-            printf("%d ", res[i] + 1);
-        printf("\n");
+        for (int i = 0; i < n; i++)
+            printf("%d ", cols[i] + 1);
+        puts("");
         return;
     }
 
-    for (int cur_col = 0; cur_col < len; cur_col++)
+    for (int col = 0; col < n; col++)
     {
-        if (is_valid(cur_col, cur_row, res))
+        if (valid_pos(cols, row, col))
         {
-            res[cur_row] = cur_col;
-            helper(cur_row + 1, len, res);
+            cols[row] = col;
+            helper(cols, row + 1, n);
         }
     }
 }
-
-bool is_valid(int cur_col, int cur_row, int res[])
+bool valid_pos(int cols[], int row, int col)
 {
-    int pre_col;
-    for (int pre_row = 0; pre_row < cur_row; pre_row++)
+    for (int i = 0; i < row; i++)
     {
-        pre_col = res[pre_row];
-        if (cur_col == pre_col || (cur_col - pre_col) == (cur_row - pre_row) || (cur_col - pre_col) == (pre_row - cur_row))
+        if (cols[i] == col || col - cols[i] == row - i || col - cols[i] == i - row)
             return false;
     }
     return true;

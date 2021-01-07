@@ -25,7 +25,7 @@ int main(void)
 bool judge_v4(void)
 {
     char c;
-    int num = 0, digit_len = 3, punct_len = 3;
+    int num = 0, digit_len = 3, punct_len = 3, n_num = 4;
     while ((c = getchar()) != '\n')
     {
         if (ispunct(c))
@@ -46,6 +46,10 @@ bool judge_v4(void)
                 clear();
                 return false;
             }
+            
+            if (digit_len == 3)
+                n_num--;
+            
             num = num * 10 + c - '0';
             digit_len--;
             if (num > 255)
@@ -60,6 +64,12 @@ bool judge_v4(void)
             return false;
         }
     }
+
+    if (n_num != 0 || punct_len != 0)
+    {
+        clear();
+        return false;
+    }
     
     return true;
 }
@@ -67,7 +77,7 @@ bool judge_v4(void)
 bool judge_v6(void)
 {
     char c;
-    int digit_len = 4, punct_len = 7;
+    int digit_len = 4, punct_len = 7, n_num = 8;
     while ((c = getchar()) != '\n')
     {
         if (ispunct(c))
@@ -87,6 +97,10 @@ bool judge_v6(void)
                 clear();
                 return false;
             }
+            
+            if (digit_len == 4)
+                n_num--;
+
             digit_len--;
             if (digit_len < 0)
             {
@@ -99,6 +113,12 @@ bool judge_v6(void)
             clear();
             return false;
         }
+    }
+
+    if (n_num != 0 || punct_len != 0)
+    {
+        clear();
+        return false;
     }
     
     return true;

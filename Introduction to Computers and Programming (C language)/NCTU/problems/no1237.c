@@ -1,53 +1,46 @@
 #include <stdio.h>
 #define LEN 10
 
-int dic[LEN] = {1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
-int visited[LEN];
-long long res;
+const int nums[LEN] = {1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
 
-void helper(int hour, int minute, int start, int n);
+void helper(int visited[], int start, int remain, int hours, int mins, long long *res);
 
 int main(void)
 {
-    int T, n;
-    scanf("%d", &T);
-
-    while (T--)
+    int times, n;
+    scanf("%d", &times);
+    while (times--)
     {
+        int visited[10] = {0};
         scanf("%d", &n);
-        
-        for (int i = 0; i < LEN; i++)
-            visited[i] = 0;
-        res = 0;
-        
-        helper(0, 0, 0, n);
+        long long res = 0;
+        helper(visited, 0, n, 0, 0, &res);
         printf("%lld\n", res);
     }
     
     return 0;
 }
 
-void helper(int hour, int minute, int start, int n)
+void helper(int visited[], int start, int remain, int hours, int mins, long long *res)
 {
-    if (hour >= 12 || minute >= 60)
-        return;
-    else if (n == 0)
-    {
-        // printf("%d:%d\n", hour, minute);
-        res += 60 * hour + minute;
-    }
-    else if (start == LEN)
+    if (hours >= 12 || mins >= 60)
         return;
     
+    if (remain == 0)
+    {
+        *res += 60 * hours + mins;
+        return;
+    }
+
     for (int i = start; i < LEN; i++)
     {
-        if (visited[i] == 0)
+        if (!visited[i])
         {
             visited[i] = 1;
             if (i < 4)
-                helper(hour + dic[i], minute, i + 1, n - 1);
+                helper(visited, i + 1, remain - 1, hours + nums[i], mins, res);
             else
-                helper(hour, minute + dic[i], i + 1, n - 1);
+                helper(visited, i + 1, remain - 1, hours, mins + nums[i], res);
             visited[i] = 0;
         }
     }

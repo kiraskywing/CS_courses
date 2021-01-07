@@ -17,7 +17,7 @@ struct QNode
 };
 
 void create_graph(struct Vertex *vertices[], int n_v, int n_e);
-void connect(struct Vertex *v1, int v2);
+void connect(struct Vertex *vertices[], int v1, int v2);
 void get_res(struct Vertex *vertices[]);
 struct QNode* AddNode(int val, int steps);
 void clear_vertices(struct Vertex *vertices[], int n_v);
@@ -51,13 +51,13 @@ void create_graph(struct Vertex *vertices[], int n_v, int n_e)
     for (int i = 0; i < n_e; i++)
     {
         scanf("%d %d", &v1, &v2);
-        connect(vertices[v1], v2);
-        connect(vertices[v2], v1);
+        connect(vertices, v1, v2);
     }
 }
-void connect(struct Vertex *v1, int v2)
+void connect(struct Vertex *vertices[], int v1, int v2)
 {
-    v1->neighbors[v1->n_neighbor++] = v2;
+    vertices[v1]->neighbors[vertices[v1]->n_neighbor++] = v2;
+    vertices[v2]->neighbors[vertices[v2]->n_neighbor++] = v1;
 }
 
 void get_res(struct Vertex *vertices[])

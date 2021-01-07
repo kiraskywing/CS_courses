@@ -1,48 +1,44 @@
 #include <stdio.h>
 
-int count = 1, target, target_x, target_y;
-int arr[1024][1024];
-
-void helper(int i_start, int j_start, int i_end, int j_end);
+void helper(int *arr, int i1, int j1, int i2, int j2, int n, int *cur, int *x, int *y, int target);
 
 int main(void)
 {
-    int n;
+    int n, target, len = 1;
     scanf("%d %d", &n, &target);
-    int len = 1;
     while (n--)
         len *= 2;
     
-    helper(0, 0, len - 1, len - 1);
-    
+    int arr[len][len], cur = 1, x, y;
+    helper(&arr[0][0], 0, 0, len - 1, len - 1, len, &cur, &x, &y, target);
+
     for (int i = 0; i < len; i++)
     {
         for (int j = 0; j < len; j++)
             printf("%d ", arr[i][j]);
-        printf("\n");
+        puts("");
     }
-    printf("%d %d\n", target_x, target_y);
-
+    printf("%d %d\n", x, y);
+    
     return 0;
 }
 
-void helper(int i_start, int j_start, int i_end, int j_end)
+void helper(int *arr, int i1, int j1, int i2, int j2, int n, int *cur, int *x, int *y, int target)
 {
-    if (i_start == i_end && j_start == j_end)
+    if (i1 == i2 && j1 == j2)
     {
-        arr[i_start][j_start] = count;
-        if (count == target)
+        if (*cur == target)
         {
-            target_x = i_start + 1;
-            target_y = j_start + 1;
+            *x = i2 + 1;
+            *y = j2 + 1;
         }
-        count++;
+        *(arr + i2 * n + j2) = (*cur)++;
         return;
     }
 
-    int i_mid = (i_start + i_end) / 2, j_mid = (j_start + j_end) / 2;
-    helper(i_start, j_start, i_mid, j_mid);
-    helper(i_start, j_mid + 1, i_mid, j_end);
-    helper(i_mid + 1, j_start, i_end, j_mid);
-    helper(i_mid + 1, j_mid + 1, i_end, j_end);
+    int i_mid = (i1 + i2) / 2, j_mid = (j1 + j2) / 2;
+    helper(arr, i1, j1, i_mid, j_mid, n, cur, x, y, target);
+    helper(arr, i1, j_mid + 1, i_mid, j2, n, cur, x, y, target);
+    helper(arr, i_mid + 1, j1, i2, j_mid, n, cur, x, y, target);
+    helper(arr, i_mid + 1, j_mid + 1, i2, j2, n, cur, x, y, target);
 }

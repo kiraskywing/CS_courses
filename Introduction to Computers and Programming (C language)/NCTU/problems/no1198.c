@@ -2,27 +2,23 @@
 
 int main(void)
 {
-    int t1 = 0, t2 = 0, n;
-    int last_t1 = 0;
-    while (scanf("%d", &n) != EOF)
+    int a = 0, b = 0, last_a = 0, cur;
+    while (scanf("%d", &cur) != EOF)
     {
-        last_t1 = 0;
-        if (t1 < t2)
+        if (a <= b)
         {
-            t1 += n;
-            last_t1 = 1;
+            a += cur;
+            last_a = 1;
         }
         else
-            t2 += n;
+        {
+            b += cur;
+            last_a = 0;
+        }
     }
 
-    int ans;
-    if (last_t1)
-        ans = t1;
-    else
-        ans = t2;
-
-    printf("%dm%ds", ans / 60, ans % 60);
-
+    int res = last_a ? a : b;
+    printf("%dm%ds", res / 60, res % 60);
+    
     return 0;
 }

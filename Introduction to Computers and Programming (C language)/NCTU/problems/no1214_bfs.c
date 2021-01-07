@@ -1,74 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-struct QNode
+struct Node
 {
     int i, j, steps;
-    struct QNode *next;
+    struct Node *next;
 };
 
-struct QNode* AddNode(int i, int j, int steps);
+void init_arr(int *arr, int *visited, int m, int n, int *i_start, int *j_start);
+void bfs(int *arr, int *visited, int m, int n, int i_start, int j_start);
+int pos_valid(int i, int j, int *arr, int *visited, int m, int n);
+struct Node* AddNode(int i, int j, int steps);
 
 int main(void)
 {
-    int m, n, s_i, s_j;
+    int m, n;
     scanf("%d %d", &m, &n);
-    int arr[m][n];
-    bool visited[m][n];
+    int arr[m][n], visited[m][n], i_start, j_start;
+    init_arr(&arr[0][0], &visited[0][0], m, n, &i_start, &j_start);
+    bfs(&arr[0][0], &visited[0][0], m, n, i_start, i_start);
+    
+    return 0;
+}
+
+void init_arr(int *arr, int *visited, int m, int n, int *i_start, int *j_start)
+{
     for (int i = 0; i < m; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            visited[i][j] = false;
-            scanf("%d", &arr[i][j]);
-            if (arr[i][j] == -2)
+            *(visited + i * n + j) = 0;
+            scanf("%d", arr + i * n + j);
+            if (*(arr + i * n + j) == -2)
             {
-                s_i = i;
-                s_j = j;
+                *i_start = i;
+                *j_start = j;
             }
         }
     }
+}
 
-    int di[] = {-1, 1, 0 ,0}, dj[] = {0, 0, 1, -1};
-    struct QNode *head = AddNode(s_i, s_j, 0);
-    struct QNode *tail = head;
-    visited[s_i][s_j] = true;
+void bfs(int *arr, int *visited, int m, int n, int i_start, int j_start)
+{
+    struct Node *head = AddNode(i_start, j_start, 0);
+    struct Node *tail = head;
+    *(visited + i_start * n + j_start) = 1;
+
+    int di[] = {-1, 1, 0, 0}, dj[] = {0, 0, 1, -1};
 
     while (head)
     {
-        if (arr[head->i][head->j] == -3)
+        int i = head->i, j = head->j, steps = head->steps;
+        if (*(arr + i * n + j) == -3)
         {
-            printf("%d", head->steps);
-            break;
+            printf("%d", steps);
+            return;
         }
-        
+
         for (int k = 0; k < 4; k++)
         {
-            int i2 = head->i + di[k];
-            int j2 = head->j + dj[k];
-            if (0 <= i2 && i2 <= m - 1 && 0 <= j2 && j2 <= n - 1 && !visited[i2][j2] && (arr[i2][j2] == 0 || arr[i2][j2] == -3))
+            int i2 = i + di[k], j2 = j + dj[k];
+            if (pos_valid(i2, j2, arr, visited, m, n))
             {
-                visited[i2][j2] = true;
-                tail->next = AddNode(i2, j2, head->steps + 1);
+                *(visited + i2 * n + j2) = 1;
+                tail->next = AddNode(i2, j2, steps + 1);
                 tail = tail->next;
             }
         }
 
-        struct QNode *prev = head;
+        struct Node *prev = head;
         head = head->next;
         free(prev);
     }
-
-    return 0;
 }
 
-struct QNode* AddNode(int i, int j, int steps)
+int pos_valid(int i, int j, int *arr, int *visited, int m, int n)
 {
-    struct QNode *new = (struct QNode*) malloc(sizeof(struct QNode));
+    if (i < 0 || i > m - 1 || j < 0 || j > n - 1)
+        return 0;
+    if (*(visited + i * n + j) || *(arr + i * n + j) == -1)
+        return 0;
+    return 1;
+}
+
+struct Node* AddNode(int i, int j, int steps)
+{
+    struct Node *new = (struct Node*) malloc(sizeof(struct Node));
     new->i = i;
     new->j = j;
     new->steps = steps;
     new->next = NULL;
     return new;
-};
+}

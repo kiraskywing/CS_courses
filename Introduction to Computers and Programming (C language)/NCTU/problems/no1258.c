@@ -76,7 +76,7 @@ int buy(struct Item *items[], char res[][11], int n, int budget, int *count)
 
 int cmp_name(const void *a, const void *b)
 {
-    return strcmp(a, b);
+    return strcmp((char *)a, (char *)b);
 }
 
 void clear_items(struct Item *items[], int n)

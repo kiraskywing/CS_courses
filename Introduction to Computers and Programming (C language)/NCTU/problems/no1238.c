@@ -1,38 +1,38 @@
 #include <stdio.h>
+#include <stdbool.h>
 
-void helper(int cur, int start, int low, int high, int digits[], int head);
+void helper(bool digits[], int res, int start, bool used, int low, int high);
 
 int main(void)
 {
-    int times;
+    int times, low, high;
     scanf("%d", &times);
-
     while (times--)
     {
-        int low, high, digits[10] = {0};
+        bool digits[10] = {false};
         scanf("%d %d", &low, &high);
-        helper(0, 1, low, high, digits, 0);
-        printf("\n");
+        helper(digits, 0, 1, false, low, high);
+        puts("");
     }
-
+    
     return 0;
 }
 
-void helper(int cur, int start, int low, int high, int digits[], int head)
+void helper(bool digits[], int res, int start, bool used, int low, int high)
 {
-    if (cur >= low && cur <= high)
-        printf("%d ", cur);
-
-    if (cur > high || start == 10 || (head == 1 && digits[start - 1] == 0))
+    if (res > high)
         return;
+    
+    if (res >= low && res <= high)
+        printf("%d ", res);
     
     for (int i = start; i < 10; i++)
     {
-        if (head == 0 || (digits[i - 1] == 1 && digits[i] == 0))
+        if (!used || digits[i - 1])
         {
-            digits[i] = 1;
-            helper(cur * 10 + i, i + 1, low, high, digits, 1);
-            digits[i] = 0;
+            digits[i] = true;
+            helper(digits, res * 10 + i, i + 1, true, low, high);
+            digits[i] = false;
         }
     }
 }

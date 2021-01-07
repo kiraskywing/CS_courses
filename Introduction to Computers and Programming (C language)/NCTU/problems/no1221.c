@@ -35,9 +35,9 @@ int main(void)
 void fast_power(long long res[2][2], long long base[2][2], int n)
 {
     long long temp[2][2];
-    while (n > 0)
+    while (n)
     {
-        if (n % 2 != 0)
+        if (n & 1)
         {
             copy(temp, res);
             multiply(res, temp, base);
@@ -45,7 +45,7 @@ void fast_power(long long res[2][2], long long base[2][2], int n)
 
         copy(temp, base);
         multiply(base, temp, temp);
-        n /= 2;
+        n >>= 1;
     }
 }
 

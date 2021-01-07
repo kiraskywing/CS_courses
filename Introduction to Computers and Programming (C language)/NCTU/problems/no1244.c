@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define LEN 202
+#define LEN 201
 
 int order_judge(char order[]);
 void add(char s1[], char s2[]);
@@ -48,7 +48,7 @@ int order_judge(char order[])
 void add(char s1[], char s2[])
 {
     strcat(s1, s2);
-    printf("%s\n", s1);
+    puts(s1);
 }
 
 void sub(char s1[], char s2[])
@@ -65,7 +65,7 @@ void sub(char s1[], char s2[])
     temp[i] = '\0';
 
     strcpy(s1, temp);
-    printf("%s\n", s1);
+    puts(s1);
 }
 
 void eq(char s1[], char s2[])

@@ -1,38 +1,37 @@
 #include <stdio.h>
 
-void helper(int arr[], int n, int target);
+int binarySearch(int arr[], int left, int right, int target);
 
 int main(void)
 {
-    int n, times, target;
+    int n, times;
     scanf("%d %d", &n, &times);
     int arr[n];
     for (int i = 0; i < n; i++)
         scanf("%d", &arr[i]);
-    
+
     while (times--)
     {
+        int target;
         scanf("%d", &target);
-        helper(arr, n, target);
+        printf("%d\n", binarySearch(arr, 0, n - 1, target));
     }
-
+    
     return 0;
 }
 
-void helper(int arr[], int n, int target)
+int binarySearch(int arr[], int left, int right, int target)
 {
-    int left = 0, right = n - 1, mid;
+    int mid;
     while (left + 1 < right)
     {
         mid = (left + right) / 2;
-        if (arr[mid] > target)
-            right = mid;
-        else
+        if (arr[mid] < target)
             left = mid;
+        else
+            right = mid;
     }
-
     if (arr[left] == target)
-        printf("%d\n", left);
-    else
-        printf("%d\n", right);
+        return left;
+    return right;
 }
