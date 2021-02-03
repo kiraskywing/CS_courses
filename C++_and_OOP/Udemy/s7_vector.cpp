@@ -18,7 +18,7 @@ int main(void)
     cout << "vector2: " << vector2.at(0) << " " << vector2.at(1) << endl;
     cout << "vector2 contains " << vector2.size() << " elements" << endl;
 
-    vector <vector<int>> vector_2d;
+    vector<vector<int>> vector_2d;
     vector_2d.push_back(vector1);
     vector_2d.push_back(vector2);
     
