@@ -35,3 +35,32 @@ SELECT CONCAT(MONTHNAME(birthdate), ' ', DAY(birthdate), ' ', YEAR(birthdate)) F
 SELECT DATE_FORMAT(birthdt, 'Was born on a %W') FROM people;
 SELECT DATE_FORMAT(birthdt, '%m/%d/%Y') FROM people;
 SELECT DATE_FORMAT(birthdt, '%m/%d/%Y at %h:%i') FROM people;
+
+SELECT name, birthdate, DATEDIFF(NOW(), birthdate) FROM people;
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 1 MONTH) FROM people;
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 10 SECOND) FROM people;
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 3 QUARTER) FROM people;
+SELECT birthdt, birthdt + INTERVAL 1 MONTH FROM people;
+SELECT birthdt, birthdt - INTERVAL 5 MONTH FROM people;
+SELECT birthdt, birthdt + INTERVAL 15 MONTH + INTERVAL 10 HOUR FROM people;
+
+CREATE TABLE comments (content VARCHAR(100), created_at TIMESTAMP DEFAULT NOW());
+INSERT INTO comments (content) VALUES('lol what a funny article');
+INSERT INTO comments (content) VALUES('I found this offensive');
+INSERT INTO comments (content) VALUES('Ifasfsadfsadfsad');
+SELECT * FROM comments ORDER BY created_at DESC;
+ 
+CREATE TABLE comments2 (content VARCHAR(100), changed_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW());
+INSERT INTO comments2 (content) VALUES('dasdasdasd');
+INSERT INTO comments2 (content) VALUES('lololololo');
+INSERT INTO comments2 (content) VALUES('I LIKE CATS AND DOGS');
+UPDATE comments2 SET content='THIS IS NOT GIBBERISH' WHERE content='dasdasdasd';
+SELECT * FROM comments2 ORDER BY changed_at;
+
+SELECT DATE_FORMAT(CURDATE(), '%m/%d/%Y');
+SELECT DATE_FORMAT(NOW(), '%M %D at %h:%i');
+ 
+CREATE TABLE tweets(content VARCHAR(140), username VARCHAR(20), created_at TIMESTAMP DEFAULT NOW());
+INSERT INTO tweets (content, username) VALUES('this is my first tweet', 'coltscat');
+INSERT INTO tweets (content, username) VALUES('this is my second tweet', 'coltscat');
+SELECT * FROM tweets;
