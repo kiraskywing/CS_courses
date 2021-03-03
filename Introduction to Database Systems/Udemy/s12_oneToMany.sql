@@ -10,7 +10,7 @@ CREATE TABLE orders(
     order_date DATE,
     amount DECIMAL(8,2),
     customer_id INT,
-    FOREIGN KEY(customer_id) REFERENCES customers(id)
+    FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
 
 
@@ -49,3 +49,9 @@ LEFT JOIN orders ON customers.id = orders.customer_id GROUP BY customers.id ORDE
 
 -- Right join
 SELECT * FROM customers RIGHT JOIN orders ON customers.id = orders.customer_id;
+
+SELECT 
+    IFNULL(first_name, "Missing F") As first,
+    IFNULL(last_name, "Missing L") AS last,
+    SUM(amount)
+FROM customers RIGHT JOIN orders ON customers.id = orders.customer_id GROUP BY customer_id;
