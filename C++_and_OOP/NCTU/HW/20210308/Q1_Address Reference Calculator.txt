@@ -1,0 +1,28 @@
+In this practice, please finish the following template by using pass-by-address and pass-by-reference.
+
+Input Format
+
+The input consists two numbers per line. You don't need to handle the input.
+
+Constraints
+
+Do not modify the main function.
+
+Output Format
+
+The output is the sum, difference, product, and the quotient of the two number. You don't need to handle the output, either.
+
+Sample Input 0
+8 4
+
+Sample Output 0
+12 4 32 2
+
+Sample Input 1
+3 7
+
+Sample Output 1
+10 -4 21 0
+
+Explanation 1
+All of the output is an integer.
