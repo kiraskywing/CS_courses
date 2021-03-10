@@ -5,35 +5,36 @@
 
 using namespace std;
 
-class Player
+class Player 
 {
 private:
-    std::string name;
+    string name;
     int health;
-     int xp;  
+    int xp;  
 public:
-    std::string get_name() const  {         // consty method
+    string get_name() const  {         // consty method
         return name;
     }
-    void set_name(std::string name_val)   {
+    void set_name(string name_val)   {
         name = name_val;
     }
-// Overloaded Constructors
+    
+    // Overloaded Constructors
     Player();
-    Player(std::string name_val);
-    Player(std::string name_val, int health_val, int xp_val);
+    Player(string name_val);
+    Player(string name_val, int health_val, int xp_val);
 };
 
 Player::Player() 
-    : Player {"None",0,0} {
+    : Player {"None", 0, 0} {
 }
 
-Player::Player(std::string name_val) 
-   : Player {name_val,0, 0}  {
+Player::Player(string name_val) 
+   : Player {name_val, 0, 0}  {
 }
   
-Player::Player(std::string name_val, int health_val, int xp_val) 
-    : name{name_val}, health{health_val}, xp{xp_val} {
+Player::Player(string name_val, int health_val, int xp_val) 
+    : name {name_val}, health {health_val}, xp {xp_val} {
 }
 
 void display_player_name(const Player &p) {
@@ -52,8 +53,5 @@ int main() {
     display_player_name(villain);
     display_player_name(hero);
 
-    
-  
     return 0;
 }
-

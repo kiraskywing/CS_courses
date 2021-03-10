@@ -8,14 +8,14 @@ using namespace std;
 class Player
 {
 private:
-   std::string name;
+   string name;
    int health;
    int xp;
 public:
 // Overloaded Constructors
     Player();
-    Player(std::string name_val);
-    Player(std::string name_val, int health_val, int xp_val);
+    Player(string name_val);
+    Player(string name_val, int health_val, int xp_val);
 };
 
 Player::Player() 
@@ -23,13 +23,13 @@ Player::Player()
         cout << "No-args constructor" << endl;
 }
 
-Player::Player(std::string name_val) 
+Player::Player(string name_val) 
    : Player {name_val,0, 0}  {
            cout << "One-arg constructor" << endl;
 }
   
-Player::Player(std::string name_val, int health_val, int xp_val) 
-    : name{name_val}, health{health_val}, xp{xp_val} {
+Player::Player(string name_val, int health_val, int xp_val) 
+    : name {name_val}, health {health_val}, xp {xp_val} {
             cout << "Three-args constructor" << endl;
 }
 

@@ -57,9 +57,7 @@ int main() {
     display_active_players();
     delete enemy;
     display_active_players();    
-
-
-
+    
     return 0;
 }
 

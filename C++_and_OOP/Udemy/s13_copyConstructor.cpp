@@ -16,10 +16,10 @@ public:
     int get_health() { return health; }
     int get_xp() {return xp; } 
     Player(std::string name_val ="None", int health_val = 0, int xp_val = 0);
-    // Copy constructor
-    Player(const Player &source);
-    // Destructor
-    ~Player() { cout << "Destructor called for: " << name << endl; }
+    
+    Player(const Player &source);    // Copy constructor
+    
+    ~Player() { cout << "Destructor called for: " << name << endl; }    // Destructor
 };
 
 Player::Player(std::string name_val, int health_val, int xp_val) 
