@@ -27,11 +27,11 @@ public:
         }
     // Destructor
     ~Player(){
-    --num_players;
+        --num_players;
     }
     
     static int get_num_players(){
-    return num_players;
+        return num_players;
     }
 };
 

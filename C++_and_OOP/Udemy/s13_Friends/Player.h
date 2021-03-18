@@ -10,10 +10,10 @@ class Player {
     friend void display_player(Player &p);
     friend class Friend_class;
 private:
-   static int num_players;
-   std::string name;
-   int health;
-   int xp;
+    static int num_players;
+    std::string name;
+    int health;
+    int xp;
 public:
     std::string get_name() { return name; }
     int get_health() { return health; }
