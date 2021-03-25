@@ -3,7 +3,7 @@
 <body>
 <h1>Transaction Test</h1>
 <form action="test.php" method="post">
-  <input type="submit" value="Transfer">
+    <input type="submit" value="Transfer">
 </form>
 
 </body>
