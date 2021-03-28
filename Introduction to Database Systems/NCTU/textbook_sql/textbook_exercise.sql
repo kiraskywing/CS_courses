@@ -36,3 +36,30 @@ group by A.course_id, A.sec_id)
 
 select course_id, sec_id from prev 
 where enrollment = (select max(enrollment) from prev)
+
+-- 3.2.a
+select sum(credits * points)
+from takes, course, grade_points
+where takes.grade = grade_points.grade
+      and takes.course_id = course.course_id
+      and ID = '12345';
+-- 3.2.b
+select round(prev.GPA, 2) as GPA 
+from (select sum(credits * points) / sum(credits) as GPA
+      from takes, course, grade_points
+      where takes.grade = grade_points.grade
+            and takes.course_id = course.course_id
+            and ID = '12345') as prev;
+-- 3.2.c
+select ID, round(sum(points * credits) / sum(credits), 2) as GPA
+from takes, course, grade_points
+where takes.grade = grade_points.grade
+and takes.course_id = course.course_id
+group by ID;
+
+-- 3.3.a
+update instructor set salary = salary * 1.1 where dept_name = 'Comp. Sci.';
+-- 3.3.b
+delete from course where course_id not in (select course_id from section);
+-- 3.3.c
+insert into instructor (select ID, name, dept_name, 30000 from student where tot_cred > 100);
