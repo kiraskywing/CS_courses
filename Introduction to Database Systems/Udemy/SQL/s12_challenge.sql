@@ -14,11 +14,7 @@ CREATE TABLE papers (
 );
 
 INSERT INTO students (first_name) VALUES 
-('Caleb'), 
-('Samantha'), 
-('Raj'), 
-('Carlos'), 
-('Lisa');
+('Caleb'), ('Samantha'), ('Raj'), ('Carlos'), ('Lisa');
  
 INSERT INTO papers (student_id, title, grade ) VALUES
 (1, 'My First Book Report', 60),

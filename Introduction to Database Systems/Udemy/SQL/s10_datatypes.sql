@@ -5,7 +5,7 @@ INSERT INTO dogs (name, breed) VALUES ('Princess Jane', 'Retriever');
 INSERT INTO dogs (name, breed) VALUES ('Princess Jane', 'Retrievesadfdsafdasfsafr');
 SELECT * FROM dogs;
 
-CREATE TABLE items(price DECIMAL(5,2));  -- DECIMAL(digits, points)
+CREATE TABLE items(price DECIMAL(5,2));  -- DECIMAL(total digits, digits after decimal)
 INSERT INTO items(price) VALUES(7);
 INSERT INTO items(price) VALUES(7987654);
 INSERT INTO items(price) VALUES(34.88);
