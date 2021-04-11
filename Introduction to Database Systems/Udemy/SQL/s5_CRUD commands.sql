@@ -20,6 +20,8 @@ SHOW WARNINGS;
 DROP TABLE tablename;
 -- Show warnings:
 SHOW WARNINGS;
+-- Show all views:
+SHOW FULL TABLES IN database_name WHERE TABLE_TYPE LIKE 'VIEW';
 
 
 CREATE TABLE employees (

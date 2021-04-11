@@ -63,3 +63,34 @@ update instructor set salary = salary * 1.1 where dept_name = 'Comp. Sci.';
 delete from course where course_id not in (select course_id from section);
 -- 3.3.c
 insert into instructor (select ID, name, dept_name, 30000 from student where tot_cred > 100);
+
+-- 4.1
+select distinct C.title, B.name from teaches A
+join instructor B on A.ID = B.ID
+join course C on A.course_id = C.course_id
+where semester = 'Spring' and year = 2017;
+-- 4.2.a
+select A.ID, count(B.sec_id) as '# of sections' from instructor A
+left join teaches B on A.ID = B.ID
+group by A.ID;
+-- 4.2.c
+select A.course_id, A.sec_id, C.ID, C.name from section A
+left join teaches B 
+    on A.course_id = B.course_id 
+    and A.sec_id = B.sec_id 
+    and A.semester = B.semester 
+    and A.year = B.year
+left join instructor C
+    on B.ID = C.ID
+where A.semester = 'Spring' and A.year = 2018;
+-- 4.2.d
+select A.dept_name, count(B.ID) as '# of instructors' from department A
+left join instructor B 
+on A.dept_name = B.dept_name 
+group by A.dept_name;
+-- 4.8.a
+select ID, name, sec_id, semester, year, time_slot_id,
+count(distinct building, room_number)
+from instructor natural join teaches natural join section
+group by ID, name, sec_id, semester, year, time_slot_id
+having count(distinct building, room_number) > 1;
