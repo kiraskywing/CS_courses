@@ -8,6 +8,8 @@ void Dungeon::createPlayer() {
     string s_name;
     cout << "Please enter player's name: ";
     cin >> s_name;
+    cin.clear();
+    cin.ignore(INT_MAX, '\n');
     
     player.setName(s_name);
     player.setCurrentRoom(&rooms[0]);
@@ -16,8 +18,25 @@ void Dungeon::createPlayer() {
 void Dungeon::createMap() {
     int m = 3, n = 4;
     int clear_idx = m * n - 1;
-    for (int i = 0; i < m * n; i++)
+    for (int i = 0; i < m * n; i++) {
         rooms.push_back(Room(false, i));
+        vector<Object*> temp;
+        if (i % 6 == 1) {
+            Item* itm = new Item("posion", 200, 0, 0);
+            temp.push_back(itm);
+        }
+        if (i % 6 == 2) {
+            Monster* mon = new Monster("Slime", 150);
+            temp.push_back(mon);
+        }
+        // if (i % 6 == 4) {
+        //     NPC* npc = new NPC("Vender");
+        //     temp.push_back(npc);
+        // }
+        
+        if (!temp.empty())
+            rooms[i].setObjects(temp);
+    }
     
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
@@ -29,13 +48,15 @@ void Dungeon::createMap() {
     }
     
     rooms[clear_idx].setIsExit(true);
+    Monster* lastBoss = new Monster("LastBoss", 300, 200, 1000);
+    vector<Object*> boss = {lastBoss};
+    rooms[clear_idx].setObjects(boss);
 }
 
 void Dungeon::handleMovement() {
-    cout << "Where do you want to go?" << endl;
+    cout << endl << "Where do you want to go?\n";
     vector<string> moves;
     Room* curRM = player.getCurrentRoom();
-    cout << "Current position index: " << curRM->getIndex() << endl << endl;
     
     if (curRM->getUpRoom())    {moves.push_back("Move Up");}
     if (curRM->getDownRoom())  {moves.push_back("Move Down");}
@@ -50,6 +71,9 @@ void Dungeon::handleMovement() {
     char c;
     do {
         cin >> c;
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
+        
         i = tolower(c) - 'a';
         if (i >= moves.size()) {cout << "Wrong input. Please enter again: ";}
     } while (i >= moves.size());
@@ -59,8 +83,6 @@ void Dungeon::handleMovement() {
     if (moves[i][5] == 'L') {player.changeRoom(curRM->getLeftRoom());}
     if (moves[i][5] == 'R') {player.changeRoom(curRM->getRightRoom());}
 }
-
-// void Dungeon::handleEvent(Object*) {}
 
 void Dungeon::startGame() {
     while (true) {
@@ -72,6 +94,9 @@ void Dungeon::startGame() {
         
         char c;
         cin >> c;
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
+        
         if (isalpha(c) && tolower(c) == 'a') { 
             createMap();
             createPlayer();
@@ -91,50 +116,79 @@ void Dungeon::startGame() {
     }
 }
 
-void Dungeon::chooseAction(vector<Object*>) {
+void Dungeon::chooseAction() {
     // check items in current room and use handleEvent
+    vector<string> actions = {"Move", "Check status"};
+    Monster* mon = nullptr;
+    Item* itm = nullptr;
+    // NPC* npc = nullptr;
+    Room* curRM = player.getCurrentRoom();
     
-    char ch;
-    while (true) {
-        cout << "(a) Move" << endl;
-        cout << "(b) Check status" << endl;
-        cout << "Please choose one action: ";
-        // cout << "C. Save to file" << endl;
-        cin >> ch;
-        
-        // A. Move
-        if (isalpha(ch) && tolower(ch) == 'a') {
-            handleMovement();
-            break;
-        }
-
-        // B. Check status
-        else if (isalpha(ch) && tolower(ch) == 'b') {
-            player.triggerEvent(&player);
-            break;
-        }
-
-        // C. Save to file
-        // else if (c == 'B') {
-        //     class Record rec;
-        //     rec.saveToFile(&player, rooms);
-        //     break;
-        // }
-
-        else
-            cout << "Wrong input. Please enter again." << endl;
+    for (Object* obj:curRM->getObjects()) {
+        mon = dynamic_cast<Monster*>(obj);
+        itm = dynamic_cast<Item*>(obj);
+        // npc = dynamic_cast<NPC*>(obj);
     }
+    
+    if (mon) {
+        mon->triggerEvent(&player);
+        if (mon->checkIsDead()) {
+            cout << "You beat " << mon->getName() << "!\n";
+            curRM->popObject(mon);
+            mon = nullptr;
+        }
+        return;
+    }
+    if (itm) actions.push_back("Pick up item");
+    // if (npc) actions.push_back("Talk to NPC");
+    
+    // actions.push_back("Save to file");
+    
+    int i;
+    cout << endl << "Please choose one action: ";
+    for (i = 0; i < actions.size(); i++)
+        cout << endl << "(" << (char)('a'+i) << ") " << actions[i];
+    cout << endl << "Enter: ";
+
+    char c;
+    do {
+        cin >> c;
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
+        
+        i = tolower(c) - 'a';
+        if (i >= actions.size() || i < 0) {cout << "Wrong input. Please enter again: ";}
+    } while (i >= actions.size());
+
+    if (actions[i][0] == 'M') handleMovement();
+    if (actions[i][0] == 'C') player.triggerEvent(&player);
+    if (actions[i][0] == 'P') {
+        itm->triggerEvent(&player);
+        curRM->popObject(itm);
+        itm = nullptr;
+    }
+    // if (actions[i][0] == 'A') npc->triggerEvent(&player);
+    // if (actions[i][0] == 'S') {
+    //     class Record rec;
+    //     rec.saveToFile(&player, rooms);
+    //     break;
+    // }
 }
 
 bool Dungeon::checkGameLogic() {
-    GameCharacter *temp = dynamic_cast<GameCharacter*>(&player);
     Room* curRM = player.getCurrentRoom();
     
-    if (temp->checkIsDead()) {
-        cout << "You are dead!" << endl;
+    if (player.checkIsDead()) {
+        cout << "You die!" << endl;
         return false;
     }
-
+    
+    Monster* mon = nullptr;
+    for (Object* obj:curRM->getObjects())
+        mon = dynamic_cast<Monster*>(obj);   
+    if (mon && !mon->checkIsDead()) 
+        return true;
+    
     if (curRM->getIsExit()) {
         cout << "Congrats! Game Clear!" << endl;
         return false;
@@ -147,7 +201,7 @@ void Dungeon::runDungeon() {
     startGame();
     
     do 
-        chooseAction(vector<Object*>(0, nullptr));
+        chooseAction();
     while (checkGameLogic());
 
     cout << endl << "===== Game end =====" << endl;

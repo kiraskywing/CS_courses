@@ -9,8 +9,6 @@
 
 using namespace std;
 
-// class Player;
-
 class Item: public Object {
 private:
     int health, attack, defense;
@@ -22,6 +20,7 @@ public:
     /* pick up action. You should add status to the  */
     /* player.                                       */
     virtual bool triggerEvent(Object*) override;
+    virtual ~Item() {}
 
     /* Set & Get function*/
     int getHealth();

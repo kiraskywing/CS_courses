@@ -5,10 +5,13 @@ using namespace std;
 Item::Item(string name, int hp, int atk, int dfn)
     : Object(name, "Item"), health(hp), attack(atk), defense(dfn) {}
 
+// copy constructor, move constructor
+
 bool Item::triggerEvent(Object *obj) {
     class Player* p = dynamic_cast<Player*>(obj);
-    p->increaseStates();
-    return false;
+    cout << "You got a " << getName() << endl;
+    p->increaseStates(health, attack, defense);
+    return true;
 }
 
 int Item::getHealth() { return health; }

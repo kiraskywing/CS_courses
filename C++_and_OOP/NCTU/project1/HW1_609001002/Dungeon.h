@@ -7,8 +7,9 @@
 #include <vector>
 #include <exception>
 #include "Player.h"
-// #include "Monster.h"
-// #include "NPC.h"
+#include "Item.h"
+#include "Monster.h"
+#include "NPC.h"
 #include "Room.h"
 // #include "Record.h"
 
@@ -42,7 +43,7 @@ public:
     /* including showing the action list */
     /* that player can do at that room   */
     /* and dealing with player's input   */
-    void chooseAction(vector<Object*>);
+    void chooseAction();
 
     /* Check whether the game should end or not */
     /* Including player victory, or he/she dead */

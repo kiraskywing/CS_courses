@@ -13,7 +13,7 @@ private:
     string tag;
 public:
     Object(string name="", string tag="");
-    ~Object() {}
+    virtual ~Object() {}
 
     /* pure virtual function */
     virtual bool triggerEvent(Object*) = 0;

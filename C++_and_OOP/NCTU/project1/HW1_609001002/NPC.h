@@ -15,14 +15,15 @@ private:
     string script;
     vector<Item> commodity;
 public:
-    NPC();
-    NPC(string name="", string tag="NPC", vector<Item> itm=vector<Item>(10, Item("Potion", 100)));
+    NPC(string name="", string tag="NPC", vector<Item> itm=vector<Item>(1, Item("sword", 0, 1000, 0)));
+    virtual ~NPC() {}
+    
     void listCommodity(); /*print all the Item in this NPC*/
 
     /* Virtual function that you need to complete   */
     /* In NPC, this function should deal with the   */
     /* transaction in easy implementation           */
-    bool triggerEvent(Object*);
+    virtual bool triggerEvent(Object*) override;
 
     /* Set & Get function*/
     void setScript(string);

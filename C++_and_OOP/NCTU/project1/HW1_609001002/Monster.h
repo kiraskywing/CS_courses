@@ -2,6 +2,8 @@
 #define ENEMY_H_INCLUDED
 
 #include <iostream>
+#include <iomanip>
+#include <cctype>
 #include <string>
 #include <vector>
 #include "GameCharacter.h"
