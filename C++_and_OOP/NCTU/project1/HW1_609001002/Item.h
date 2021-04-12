@@ -14,12 +14,13 @@ private:
     int health, attack, defense;
 public:
     Item(string name="", int hp=0, int atk=0, int dfn=0);
+    // copy constructor
 
     /* Virtual function that you need to complete    */
     /* In Item, this function should deal with the   */
     /* pick up action. You should add status to the  */
     /* player.                                       */
-    virtual bool triggerEvent(Object*) override;
+    virtual void triggerEvent(Object*) override;
     virtual ~Item() {}
 
     /* Set & Get function*/

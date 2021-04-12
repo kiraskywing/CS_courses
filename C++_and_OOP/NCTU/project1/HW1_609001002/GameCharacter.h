@@ -17,7 +17,7 @@ public:
     bool checkIsDead();
     int takeDamage(int);
 
-    virtual bool triggerEvent(Object*) override;
+    virtual void triggerEvent(Object*) override;
 
     /* Set & Get function*/
     void setMaxHealth(int);

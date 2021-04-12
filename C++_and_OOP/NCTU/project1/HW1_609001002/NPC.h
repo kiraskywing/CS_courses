@@ -18,18 +18,18 @@ public:
     NPC(string name="", string tag="NPC", vector<Item> itm=vector<Item>(1, Item("sword", 0, 1000, 0)));
     virtual ~NPC() {}
     
-    void listCommodity(); /*print all the Item in this NPC*/
+    // void listCommodity(); /*print all the Item in this NPC*/
 
     /* Virtual function that you need to complete   */
     /* In NPC, this function should deal with the   */
     /* transaction in easy implementation           */
-    virtual bool triggerEvent(Object*) override;
+    virtual void triggerEvent(Object*) override;
 
     /* Set & Get function*/
-    void setScript(string);
-    void setCommodity(vector<Item>);
-    string getScript();
-    vector<Item> getCommodity();
+    // void setScript(string);
+    // void setCommodity(vector<Item>);
+    // string getScript();
+    Item getCommodity(int);
 };
 
 

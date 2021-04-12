@@ -18,6 +18,7 @@ void Dungeon::createPlayer() {
 void Dungeon::createMap() {
     int m = 3, n = 4;
     int clear_idx = m * n - 1;
+    
     for (int i = 0; i < m * n; i++) {
         rooms.push_back(Room(false, i));
         vector<Object*> temp;
@@ -29,10 +30,10 @@ void Dungeon::createMap() {
             Monster* mon = new Monster("Slime", 150);
             temp.push_back(mon);
         }
-        // if (i % 6 == 4) {
-        //     NPC* npc = new NPC("Vender");
-        //     temp.push_back(npc);
-        // }
+        if (i % 6 == 4) {
+            NPC* npc = new NPC("Vender", "", vector<Item>{Item("Sword", 0, 1000), Item("Posion", 1000, 0)});
+            temp.push_back(npc);
+        }
         
         if (!temp.empty())
             rooms[i].setObjects(temp);
@@ -63,8 +64,8 @@ void Dungeon::handleMovement() {
     if (curRM->getLeftRoom())  {moves.push_back("Move Left");}
     if (curRM->getRightRoom()) {moves.push_back("Move Right");}
     
-    int i;
-    for (i = 0; i < moves.size(); i++)
+    int i, n = moves.size();
+    for (i = 0; i < n; i++)
         cout << "(" << (char)('a'+i) << ") " << moves[i] << endl;
     cout << "Please choose one direction: ";
 
@@ -75,8 +76,8 @@ void Dungeon::handleMovement() {
         cin.ignore(INT_MAX, '\n');
         
         i = tolower(c) - 'a';
-        if (i >= moves.size()) {cout << "Wrong input. Please enter again: ";}
-    } while (i >= moves.size());
+        if (i >= n || i < 0) {cout << "Wrong input. Please enter again: ";}
+    } while (i >= n || i < 0);
 
     if (moves[i][5] == 'U') {player.changeRoom(curRM->getUpRoom());}
     if (moves[i][5] == 'D') {player.changeRoom(curRM->getDownRoom());}
@@ -121,13 +122,13 @@ void Dungeon::chooseAction() {
     vector<string> actions = {"Move", "Check status"};
     Monster* mon = nullptr;
     Item* itm = nullptr;
-    // NPC* npc = nullptr;
+    NPC* npc = nullptr;
     Room* curRM = player.getCurrentRoom();
     
     for (Object* obj:curRM->getObjects()) {
         mon = dynamic_cast<Monster*>(obj);
         itm = dynamic_cast<Item*>(obj);
-        // npc = dynamic_cast<NPC*>(obj);
+        npc = dynamic_cast<NPC*>(obj);
     }
     
     if (mon) {
@@ -140,7 +141,7 @@ void Dungeon::chooseAction() {
         return;
     }
     if (itm) actions.push_back("Pick up item");
-    // if (npc) actions.push_back("Talk to NPC");
+    if (npc) actions.push_back("Talk to NPC");
     
     // actions.push_back("Save to file");
     
@@ -167,7 +168,7 @@ void Dungeon::chooseAction() {
         curRM->popObject(itm);
         itm = nullptr;
     }
-    // if (actions[i][0] == 'A') npc->triggerEvent(&player);
+    if (actions[i][0] == 'T') npc->triggerEvent(&player);
     // if (actions[i][0] == 'S') {
     //     class Record rec;
     //     rec.saveToFile(&player, rooms);

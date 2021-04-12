@@ -16,7 +16,7 @@ public:
     virtual ~Object() {}
 
     /* pure virtual function */
-    virtual bool triggerEvent(Object*) = 0;
+    virtual void triggerEvent(Object*) = 0;
 
     /* Set & Get function*/
     void setName(string n);

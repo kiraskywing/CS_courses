@@ -7,11 +7,10 @@ Item::Item(string name, int hp, int atk, int dfn)
 
 // copy constructor, move constructor
 
-bool Item::triggerEvent(Object *obj) {
+void Item::triggerEvent(Object *obj) {
     class Player* p = dynamic_cast<Player*>(obj);
     cout << "You got a " << getName() << endl;
     p->increaseStates(health, attack, defense);
-    return true;
 }
 
 int Item::getHealth() { return health; }

@@ -14,9 +14,7 @@ int GameCharacter::takeDamage(int dmg) {
     return dmg;
 }
 
-bool GameCharacter::triggerEvent(Object* obj) {
-    return true;
-}
+void GameCharacter::triggerEvent(Object* obj) {}
 
 void GameCharacter::setMaxHealth(int maxHp) { maxHealth = maxHp; }
 void GameCharacter::setCurrentHealth(int hp) { currentHealth = hp; }

@@ -28,7 +28,7 @@ public:
     /* Virtual function that you need to complete   */
     /* In Player, this function should show the     */
     /* status of player.                            */
-    bool triggerEvent(Object*);
+    virtual void triggerEvent(Object*) override;
 
     /* Set & Get function*/
     void setCurrentRoom(Room*);

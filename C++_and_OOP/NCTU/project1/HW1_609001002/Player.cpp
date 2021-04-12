@@ -11,7 +11,7 @@ Player::Player(string name, int hp, int atk, int dfn)
 void Player::increaseStates(int hp, int atk, int dfn) {
     hp += getCurrentHealth();
     atk += getAttack();
-    dfn += getAttack();
+    dfn += getDefense();
     setCurrentHealth(hp);
     setAttack(atk);
     setDefense(dfn);
@@ -22,15 +22,13 @@ void Player::changeRoom(Room* nxt) {
     currentRoom = nxt;
 }
 
-bool Player::triggerEvent(Object* obj) {
+void Player::triggerEvent(Object* obj) {
     class GameCharacter* gc = dynamic_cast<GameCharacter*>(obj);
     cout << endl << "Player " << obj->getName() << "'s status: " << endl;
     cout << "=> Health: " << gc->getCurrentHealth() << "/" << gc->getMaxHealth() << endl;
     cout << "=> Attack: " << gc->getAttack() << endl;
     cout << "=> Defense: " << gc->getDefense() << endl;
     cout << "=> Currently at Room " << getCurrentRoom()->getIndex() << endl;
-
-    return true;
 }
 
 void Player::setCurrentRoom(Room* rm) { currentRoom = rm; }

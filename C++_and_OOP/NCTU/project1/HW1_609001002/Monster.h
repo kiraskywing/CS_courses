@@ -13,6 +13,7 @@ using namespace std;
 
 class Monster: public GameCharacter {
 private:
+    // int retreat_possibility;
 public:
     Monster(string name="", int hp=100, int atk=100, int dfn=100);
     virtual ~Monster() {}
@@ -20,8 +21,8 @@ public:
     /* Virtual function that you need to complete   */
     /* In Monster, this function should deal with   */
     /* the combat system.                           */
-    virtual bool triggerEvent(Object*) override;
+    virtual void triggerEvent(Object*) override;
+    // bool treatSuccess();
 };
-
 
 #endif // ENEMY_H_INCLUDED
