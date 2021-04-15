@@ -23,6 +23,10 @@ SHOW WARNINGS;
 -- Show all views:
 SHOW FULL TABLES IN database_name WHERE TABLE_TYPE LIKE 'VIEW';
 
+-- Alter table columns
+ALTER TABLE table_name ADD column_name datatype;           -- ALTER TABLE customers ADD Discount VARCHAR(10);
+ALTER TABLE table_name ALTER COLUMN column_name datatype;  -- ALTER TABLE customers ALTER COLUMN Discount DECIMAL(18, 2);
+ALTER TABLE table_name DROP COLUMN column_name;            -- ALTER TABLE customers DROP COLUMN Discount;
 
 CREATE TABLE employees (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,

@@ -117,5 +117,5 @@ create table prereq
 create table grade_points 
 	(grade varchar(2) not null, 
 	points numeric(2, 1) not null,
-	primary key (grade, points)
+	primary key (grade)
 	);
