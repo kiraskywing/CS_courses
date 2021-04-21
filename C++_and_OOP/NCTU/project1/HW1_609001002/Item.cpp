@@ -2,20 +2,30 @@
 
 using namespace std;
 
-Item::Item(string name, int hp, int atk, int dfn)
-    : Object(name, "Item"), health(hp), attack(atk), defense(dfn) {}
-
 // copy constructor, move constructor
-
-void Item::triggerEvent(Object *obj) {
+bool Item::triggerEvent(Object *obj) {
     class Player* p = dynamic_cast<Player*>(obj);
-    cout << "You got a " << getName() << endl;
-    p->increaseStates(health, attack, defense);
-}
+    
+    string itmName = getName();
+    
+    if (itmName.find("Sword") != string::npos) {
+        if (itmName == p->getWeaponName()) {
+            cout << endl << "You already have " << itmName << endl;
+            return false;
+        }
+        
+        cout << endl << "You got " << getName() << endl;
+        int preAtk = p->getAttack(), preAddAtk = p->getAddedAttack(), preWeaponAtk = p->getWeaponAttack();
+        p->setWeaponName(itmName);
+        p->setWeaponAttack(attack);
+        p->setCriticalAttackRate(criticalAttackRate);
+        p->setAttack(preAtk - preWeaponAtk); 
+        p->setAddedAttack(preAddAtk - preWeaponAtk);
+    }
+    else if (itmName.find("Posion") != string::npos) 
+        cout << endl << "You use " << itmName << endl;
+    else 
+        cout << endl << "You got " << itmName << endl;
 
-int Item::getHealth() { return health; }
-int Item::getAttack() { return attack; }
-int Item::getDefense() { return defense; }
-void Item::setHealth(int hp) { health = hp; }
-void Item::setAttack(int atk) { attack = atk; }
-void Item::setDefense(int dfn) { defense = dfn; }
+    return p->increaseStates(health, attack, money);
+}

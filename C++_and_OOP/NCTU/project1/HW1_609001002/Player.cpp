@@ -2,19 +2,36 @@
 
 using namespace std;
 
-Player::Player(string name, int hp, int atk, int dfn)
-: GameCharacter(name, "Player", hp, atk, dfn),  currentRoom(nullptr), previousRoom(nullptr)
-{}
+Player::Player(string name, int hp, int atk, int addAtk, int wpAtk, int mny, int car,  int lv)
+    : GameCharacter(name, "Player", hp, atk + addAtk + wpAtk, mny, car) {
+           currentRoom = previousRoom = nullptr;
+           weaponName = "Sword";
+           inventoryMaxSize = 6; addedAttack = addAtk; weaponAttack = wpAtk; level = lv;
+        }  
 
-// void Player::addItem(Item itm) { inventory.push_back(itm); }
-
-void Player::increaseStates(int hp, int atk, int dfn) {
-    hp += getCurrentHealth();
-    atk += getAttack();
-    dfn += getDefense();
-    setCurrentHealth(hp);
-    setAttack(atk);
-    setDefense(dfn);
+bool Player::increaseStates(int hp, int addAtk, int mny) {
+    if (hp) {
+        int pre_hp = getCurrentHealth(), max_hp = getMaxHealth();
+        if (pre_hp == max_hp) {
+            cout << "Your health is already full!" << endl;
+            return false;
+        }
+        hp = (hp + pre_hp >= max_hp ? max_hp :hp + pre_hp);
+        setCurrentHealth(hp);
+        cout << "Your health is increased to " << hp << (hp == max_hp ? " (full) " : "") << endl;
+    }
+    if (addAtk) {
+        addedAttack += addAtk;
+        addAtk += getAttack();
+        setAttack(addAtk);
+        cout << "Your attack is increased to " << addAtk << endl;
+    }
+    if (mny) {
+        mny += getMoney();
+        setMoney(mny);
+        cout << "Your money is increased to " << mny << endl;
+    }
+    return true;
 }
 
 void Player::changeRoom(Room* nxt) {
@@ -22,18 +39,70 @@ void Player::changeRoom(Room* nxt) {
     currentRoom = nxt;
 }
 
-void Player::triggerEvent(Object* obj) {
-    class GameCharacter* gc = dynamic_cast<GameCharacter*>(obj);
-    cout << endl << "Player " << obj->getName() << "'s status: " << endl;
-    cout << "=> Health: " << gc->getCurrentHealth() << "/" << gc->getMaxHealth() << endl;
-    cout << "=> Attack: " << gc->getAttack() << endl;
-    cout << "=> Defense: " << gc->getDefense() << endl;
-    cout << "=> Currently at Room " << getCurrentRoom()->getIndex() << endl;
+bool Player::triggerEvent(Object* obj) {
+    cout << endl << "[Player " << getName() << "'s status]" << endl;
+    cout << "=> Level: " << level << endl;
+    cout << "=> Health: " << getCurrentHealth() << "/" << getMaxHealth() << endl;
+    cout << "=> Attack: " << getAttack() << endl;
+    cout << "=> Critical attack rate: " << getCriticalAttackRate() << '%' << endl;
+    cout << "=> Money: " << getMoney() << endl;
+    cout << "=> Weapon: " << weaponName << endl;
+    cout << "=> Number of posions: " << inventory.size() << endl;
+    return true;
 }
 
-void Player::setCurrentRoom(Room* rm) { currentRoom = rm; }
-void Player::setPreviousRoom(Room* rm) { previousRoom = rm; }
-// void Player::setInventory(vector<Item> itm) { inventory = itm; }
-Room* Player::getCurrentRoom() { return currentRoom; }
-Room* Player::getPreviousRoom() { return previousRoom; }
-// vector<Item> Player::getInventory() { return inventory; }
+void Player::levelUp() {
+    cout << endl << "******* Level up! *******";
+    level++;
+    int maxHP = getMaxHealth(), curHP = getCurrentHealth();
+    maxHP *= 2; curHP = maxHP;
+    setMaxHealth(maxHP); setCurrentHealth(curHP);
+
+    int atk = getAttack();
+    atk = (atk - addedAttack - weaponAttack) * 2 + addedAttack + weaponAttack;
+    setAttack(atk);
+
+    triggerEvent(nullptr);
+}
+
+void Player::useInventory() {
+    while (true) {
+        if (inventory.empty()) {
+            cout << endl << "No item." << endl;
+            return;
+        }
+        
+        cout << endl << "Please chose one item to use: ";
+        Item* itm;
+        int i, n = inventory.size();
+        for (i = 0; i < n; i++) {
+            itm = dynamic_cast<Item*>(inventory[i]);
+            cout << endl << "(" << (char)('a'+i) << ") " << itm->getName() 
+                << ": Recover " << itm->getHealth() << " Health";
+        }
+        cout << endl << "(" << (char)('a'+i) << ") " << "Back";
+        cout << endl << "Enter: ";
+
+        char c;
+        do {
+            cin >> c;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            i = tolower(c) - 'a';
+            if (i > n || i < 0) {cout << "Wrong input. Please enter again: ";}
+        } while (i > n || i < 0);
+
+        if (i == n) return;
+
+        itm = dynamic_cast<Item*>(inventory[i]);
+        if (itm->triggerEvent(this)) {
+            delete inventory[i];
+            if (i != n - 1) {
+                for (int j = i; j < n - 1; j++)
+                    inventory[j] = inventory[j + 1];
+            }
+            inventory[n - 1] = nullptr;
+            inventory.pop_back();
+        }
+    }
+}

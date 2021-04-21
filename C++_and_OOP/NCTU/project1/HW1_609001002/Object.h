@@ -9,20 +9,19 @@ using namespace std;
 
 class Object {
 private:
-    string name;
-    string tag;
+    string name, tag;
 public:
-    Object(string name="", string tag="");
+    Object(string nm="", string tg="") : name(nm), tag(tg) {}
     virtual ~Object() {}
 
     /* pure virtual function */
-    virtual void triggerEvent(Object*) = 0;
+    virtual bool triggerEvent(Object*) = 0;
 
     /* Set & Get function*/
-    void setName(string n);
-    void setTag(string t);
-    string getName();
-    string getTag();
+    void setName(string nm) { name = nm; }
+    void setTag(string tg) { tag = tg; }
+    string getName() { return name; }
+    string getTag() { return tag; }
 };
 
 #endif // OBJECT_H_INCLUDED

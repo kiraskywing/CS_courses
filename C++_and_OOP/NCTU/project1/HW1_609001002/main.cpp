@@ -7,7 +7,7 @@
 using namespace std;
 
 int main(){
-    Dungeon dungeon = Dungeon();
+    Dungeon dungeon;
     dungeon.runDungeon();
     return 0;
 }

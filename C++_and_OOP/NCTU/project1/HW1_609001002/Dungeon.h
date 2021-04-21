@@ -6,12 +6,13 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <random>
 #include "Player.h"
 #include "Item.h"
 #include "Monster.h"
 #include "NPC.h"
 #include "Room.h"
-// #include "Record.h"
+#include "Record.h"
 
 using namespace std;
 
@@ -19,9 +20,24 @@ class Dungeon {
 private:
     Player player;
     vector<Room> rooms;
+    
+    int map_row, map_col;
+    int maxMonsterNumber, maxChestNumber;
+    int currentMonsterNumber, currentChestNumber;
+    Room *boss_room;
+    
+    random_device rd;
+
 public:
-    Dungeon();
+    Dungeon() { 
+        map_row = 4; map_col = 5; 
+        currentMonsterNumber = maxMonsterNumber = 3;
+        currentChestNumber = maxChestNumber = 3;
+    }
     ~Dungeon() {}
+
+    int randomInt(int, int);
+    int getRandomRoomNumber();
     
     /* Create a new player, and give him/her basic status */
     void createPlayer();
@@ -29,8 +45,15 @@ public:
     /* Create a map, which include several different rooms */
     void createMap();
 
+    void createNPC();
+    void createMonster();
+    void createChest(int);
+    void setBossRoom(Room* rm) { boss_room = rm; }
+
     /* Deal with player's moveing action */
     void handleMovement();
+
+    void showMap();
 
     /* Deal with player's iteraction with objects in that room */
     // void handleEvent(Object*);

@@ -6,6 +6,7 @@
 #include <cctype>
 #include <string>
 #include <vector>
+#include <random>
 #include "GameCharacter.h"
 #include "Player.h"
 
@@ -13,16 +14,20 @@ using namespace std;
 
 class Monster: public GameCharacter {
 private:
-    // int retreat_possibility;
+    random_device rd;
 public:
-    Monster(string name="", int hp=100, int atk=100, int dfn=100);
+    Monster(string name="", int hp=100, int atk=100, int mny=100, int car=10)
+        :GameCharacter(name, "Monster", hp, atk, mny, car) {}
+    
     virtual ~Monster() {}
 
     /* Virtual function that you need to complete   */
     /* In Monster, this function should deal with   */
     /* the combat system.                           */
-    virtual void triggerEvent(Object*) override;
-    // bool treatSuccess();
+    virtual bool triggerEvent(Object*) override;
+    
+    bool oddFunction(int);
+    void attackFunction(GameCharacter*, GameCharacter*);
 };
 
 #endif // ENEMY_H_INCLUDED

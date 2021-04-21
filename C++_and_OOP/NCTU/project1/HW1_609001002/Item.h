@@ -11,25 +11,28 @@ using namespace std;
 
 class Item: public Object {
 private:
-    int health, attack, defense;
+    int health, attack, money, criticalAttackRate;
 public:
-    Item(string name="", int hp=0, int atk=0, int dfn=0);
+    Item(string name="", int hp=0, int atk=0, int mny=0, int car=0)
+        : Object(name, "Item"), health(hp), attack(atk), money(mny), criticalAttackRate(car) {}
     // copy constructor
 
     /* Virtual function that you need to complete    */
     /* In Item, this function should deal with the   */
     /* pick up action. You should add status to the  */
     /* player.                                       */
-    virtual void triggerEvent(Object*) override;
+    virtual bool triggerEvent(Object*) override;
     virtual ~Item() {}
 
     /* Set & Get function*/
-    int getHealth();
-    int getAttack();
-    int getDefense();
-    void setHealth(int);
-    void setAttack(int);
-    void setDefense(int);
+    void setHealth(int hp) { health = hp; }
+    void setAttack(int atk) { attack = atk; }
+    void setMoney(int mny) { money = mny; }
+    void setCriticalAttackRate(int r) { criticalAttackRate = r; }
+    int getHealth() { return health; }
+    int getAttack() { return attack; }
+    int getMoney() { return money; }
+    int getCriticalAttackRate() { return criticalAttackRate; }
 };
 
 #endif // ITEM_H_INCLUDED

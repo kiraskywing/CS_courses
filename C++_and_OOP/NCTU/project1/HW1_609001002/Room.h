@@ -10,34 +10,37 @@ using namespace std;
 
 class Room {
 private:
-    Room* upRoom;
-    Room* downRoom;
-    Room* leftRoom;
-    Room* rightRoom;
-    bool isExit;
+    Room *upRoom, *downRoom, *leftRoom, *rightRoom;
+    bool isVisited, isExit;
     int index;
-    vector<Object*> objects; /*contain 1 or multiple objects, including monster, npc, etc*/
+    Object* object; /*contain 1 or multiple objects, including monster, npc, etc*/
 public:
-    Room(bool iEt=false, int idx=0, vector<Object*> obj=vector<Object*>(0, nullptr));
+    Room(int idx=0, bool iVt=false, bool iEt=false, Object* obj=nullptr) {
+    leftRoom = rightRoom = upRoom = downRoom = nullptr;
+    isVisited = iVt; isExit = iEt; index = idx; 
+    object = obj;
+    }
     ~Room() {}
     
-    bool popObject(Object*); /*pop out the specific object, used when the interaction is done*/
+    void popObject() { delete object; object = nullptr; } /*pop out the specific object, used when the interaction is done*/
 
     /* Set & Get function*/
-    void setUpRoom(Room*);
-    void setDownRoom(Room*);
-    void setLeftRoom(Room*);
-    void setRightRoom(Room*);
-    void setIsExit(bool);
-    void setIndex(int);
-    void setObjects(vector<Object*> &obj);
-    bool getIsExit();
-    int getIndex();
-    vector<Object*>& getObjects();
-    Room* getUpRoom();
-    Room* getDownRoom();
-    Room* getLeftRoom();
-    Room* getRightRoom();
+    void setUpRoom(Room* up) { upRoom = up; }
+    void setDownRoom(Room* down) { downRoom = down; }
+    void setLeftRoom(Room* left) { leftRoom = left; }
+    void setRightRoom(Room* right) { rightRoom = right; }
+    void setIsVisited(bool iVt) { isVisited = iVt; }
+    void setIsExit(bool iEt) { isExit = iEt; }
+    void setIndex(int idx) { index = idx; }
+    bool getIsVisited() { return isVisited; }
+    bool getIsExit() { return isExit; }
+    int getIndex() { return index; }
+    Object* getObject() { return object; }
+    void setObjects(Object* obj) { object = obj; }
+    Room* getUpRoom() { return upRoom; }
+    Room* getDownRoom() { return downRoom; }
+    Room* getLeftRoom() { return leftRoom; }
+    Room* getRightRoom() { return rightRoom; }
 };
 
 #endif // ROOM_H_INCLUDED

@@ -9,25 +9,29 @@ using namespace std;
 
 class GameCharacter: public Object {
 private:
-    int maxHealth, currentHealth, attack, defense;
+    int maxHealth, currentHealth, attack, money, criticalAttackRate;
 public:
-    GameCharacter(string name="", string tag="", int hp=0, int atk=0, int dfn=0);
+    GameCharacter(string name="", string tag="", int hp=0, int atk=0, int mny=0, int car=0)
+        : Object(name, tag), maxHealth(hp), currentHealth(hp), attack(atk), money(mny), criticalAttackRate(car) {}
+    
     virtual ~GameCharacter() {}
     
-    bool checkIsDead();
-    int takeDamage(int);
-
-    virtual void triggerEvent(Object*) override;
+    virtual bool triggerEvent(Object*) override { return true; }
+    
+    bool checkIsDead() { return currentHealth <= 0; }
+    int takeDamage(int dmg) { currentHealth -= dmg; return dmg; }
 
     /* Set & Get function*/
-    void setMaxHealth(int);
-    void setCurrentHealth(int);
-    void setAttack(int);
-    void setDefense(int);
-    int getMaxHealth();
-    int getCurrentHealth();
-    int getAttack();
-    int getDefense();
+    void setMaxHealth(int maxHp) { maxHealth = maxHp; }
+    void setCurrentHealth(int hp) { currentHealth = hp; }
+    void setAttack(int atk) { attack = atk; }
+    void setMoney(int mny) { money = mny; }
+    void setCriticalAttackRate(int car) { criticalAttackRate = car; }
+    int getMaxHealth() { return maxHealth; }
+    int getCurrentHealth() { return currentHealth; }
+    int getAttack() { return attack; }
+    int getMoney() { return money; }
+    int getCriticalAttackRate() { return criticalAttackRate; }
 };
 
 #endif // GAMECHARACTER_H_INCLUDED

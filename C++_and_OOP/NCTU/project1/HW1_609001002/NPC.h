@@ -23,14 +23,13 @@ public:
     /* Virtual function that you need to complete   */
     /* In NPC, this function should deal with the   */
     /* transaction in easy implementation           */
-    virtual void triggerEvent(Object*) override;
+    virtual bool triggerEvent(Object*) override;
 
     /* Set & Get function*/
     // void setScript(string);
     // void setCommodity(vector<Item>);
     // string getScript();
-    Item getCommodity(int);
+    vector<Item> getCommodity() { return commodity; }
 };
-
 
 #endif // NPC_H_INCLUDED
