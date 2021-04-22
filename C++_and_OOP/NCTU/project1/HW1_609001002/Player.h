@@ -17,7 +17,7 @@ private:
     string weaponName;
     int inventoryMaxSize, addedAttack, weaponAttack, level;
 public:
-    Player(string name="", int hp=250, int atk=50, int addAtk=0, int wpAtk=50, int mny=100, int car=20, int lv=1);
+    Player(string name="", int hp=250, int atk=50, int addAtk=0, int wpAtk=50, int mny=100, int car=10, int lv=1);
     
     virtual ~Player() {}
 
@@ -40,7 +40,7 @@ public:
     void setAddedAttack(int atk) { addedAttack = atk; }
     void setLevel(int lv) { level = lv; }
     void setInventorySize(int n) { inventoryMaxSize = n; }
-    void setInventory(vector<Object*>& itm) { inventory.insert(inventory.end(), itm.begin(), itm.end()); }
+    void setInventory(vector<Object*>& itms) { inventory.insert(inventory.end(), itms.begin(), itms.end()); }
     Room* getCurrentRoom() { return currentRoom; }
     Room* getPreviousRoom() { return previousRoom; }
     string getWeaponName() { return weaponName; }
@@ -48,7 +48,7 @@ public:
     int getAddedAttack() { return addedAttack; }
     int getLevel() { return level; }
     int getInventorySize() { return inventoryMaxSize; }
-    vector<Object*>& getInventory() { return inventory; }
+    vector<Object*> getInventory() { return inventory; }
     void useInventory();
 };
 

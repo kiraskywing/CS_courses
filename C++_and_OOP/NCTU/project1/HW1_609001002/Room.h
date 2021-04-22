@@ -11,8 +11,8 @@ using namespace std;
 class Room {
 private:
     Room *upRoom, *downRoom, *leftRoom, *rightRoom;
-    bool isVisited, isExit;
     int index;
+    bool isVisited, isExit;
     Object* object; /*contain 1 or multiple objects, including monster, npc, etc*/
 public:
     Room(int idx=0, bool iVt=false, bool iEt=false, Object* obj=nullptr) {
@@ -25,22 +25,22 @@ public:
     void popObject() { delete object; object = nullptr; } /*pop out the specific object, used when the interaction is done*/
 
     /* Set & Get function*/
+    void setIndex(int idx) { index = idx; }
+    void setIsVisited(bool iVt) { isVisited = iVt; }
+    void setIsExit(bool iEt) { isExit = iEt; }
     void setUpRoom(Room* up) { upRoom = up; }
     void setDownRoom(Room* down) { downRoom = down; }
     void setLeftRoom(Room* left) { leftRoom = left; }
     void setRightRoom(Room* right) { rightRoom = right; }
-    void setIsVisited(bool iVt) { isVisited = iVt; }
-    void setIsExit(bool iEt) { isExit = iEt; }
-    void setIndex(int idx) { index = idx; }
+    void setObjects(Object* obj) { object = obj; }
+    int getIndex() { return index; }
     bool getIsVisited() { return isVisited; }
     bool getIsExit() { return isExit; }
-    int getIndex() { return index; }
-    Object* getObject() { return object; }
-    void setObjects(Object* obj) { object = obj; }
     Room* getUpRoom() { return upRoom; }
     Room* getDownRoom() { return downRoom; }
     Room* getLeftRoom() { return leftRoom; }
     Room* getRightRoom() { return rightRoom; }
+    Object* getObject() { return object; }
 };
 
 #endif // ROOM_H_INCLUDED

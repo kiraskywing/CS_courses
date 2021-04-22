@@ -10,7 +10,7 @@ bool Monster::triggerEvent(Object* obj) {
         cout << endl << "Please choose action:" << endl
                 << "(a) Fight with enemy" << endl
                 << "(b) Check status" << endl
-                << "(c) Use posion" << endl
+                << "(c) Use inventory" << endl
                 << "(d) Retreat" << endl
             //  << "(e) Save to file\n"
                 << "Enter: ";

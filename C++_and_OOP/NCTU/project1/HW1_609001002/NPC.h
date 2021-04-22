@@ -12,10 +12,9 @@ using namespace std;
 
 class NPC: public GameCharacter {
 private:
-    string script;
-    vector<Item> commodity;
+    vector<Object*> commodity;
 public:
-    NPC(string name="", string tag="NPC", vector<Item> itm=vector<Item>(1, Item("sword", 0, 1000, 0)));
+    NPC(string name="") : GameCharacter(name, "NPC") {}
     virtual ~NPC() {}
     
     // void listCommodity(); /*print all the Item in this NPC*/
@@ -26,10 +25,8 @@ public:
     virtual bool triggerEvent(Object*) override;
 
     /* Set & Get function*/
-    // void setScript(string);
-    // void setCommodity(vector<Item>);
-    // string getScript();
-    vector<Item> getCommodity() { return commodity; }
+    void setCommodity(vector<Object*>& itms) { commodity.insert(commodity.end(), itms.begin(), itms.end()); }
+    vector<Object*> getCommodity() { return commodity; }
 };
 
 #endif // NPC_H_INCLUDED

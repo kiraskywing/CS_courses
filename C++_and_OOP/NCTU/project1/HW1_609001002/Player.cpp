@@ -18,7 +18,7 @@ bool Player::increaseStates(int hp, int addAtk, int mny) {
         }
         hp = (hp + pre_hp >= max_hp ? max_hp :hp + pre_hp);
         setCurrentHealth(hp);
-        cout << "Your health is increased to " << hp << (hp == max_hp ? " (full) " : "") << endl;
+        cout << "Your health is increased to " << hp << endl;
     }
     if (addAtk) {
         addedAttack += addAtk;
@@ -27,9 +27,10 @@ bool Player::increaseStates(int hp, int addAtk, int mny) {
         cout << "Your attack is increased to " << addAtk << endl;
     }
     if (mny) {
+        cout << "Your money is " << (mny > 0 ? "increased" : "decreased") << " to ";
         mny += getMoney();
         setMoney(mny);
-        cout << "Your money is increased to " << mny << endl;
+        cout << mny << endl;
     }
     return true;
 }
@@ -72,16 +73,16 @@ void Player::useInventory() {
             return;
         }
         
-        cout << endl << "Please chose one item to use: ";
+        cout << endl << "Please chose one item: ";
         Item* itm;
         int i, n = inventory.size();
         for (i = 0; i < n; i++) {
             itm = dynamic_cast<Item*>(inventory[i]);
             cout << endl << "(" << (char)('a'+i) << ") " << itm->getName() 
-                << ": Recover " << itm->getHealth() << " Health";
+                 << ": Recover " << itm->getHealth() << " Health";
         }
-        cout << endl << "(" << (char)('a'+i) << ") " << "Back";
-        cout << endl << "Enter: ";
+        cout << endl << "(" << (char)('a'+i) << ") " << "Back"
+             << endl << "Enter: ";
 
         char c;
         do {
@@ -89,13 +90,27 @@ void Player::useInventory() {
             cin.clear();
             cin.ignore(INT_MAX, '\n');
             i = tolower(c) - 'a';
-            if (i > n || i < 0) {cout << "Wrong input. Please enter again: ";}
+            if (i > n || i < 0) cout << "Wrong input. Please enter again: ";
         } while (i > n || i < 0);
 
         if (i == n) return;
 
+        cout << endl << "Please chose use, discard or go back: "
+             << endl << "(a) Use" 
+             << endl << "(b) Discard"
+             << endl << "(c) Back"
+             << endl << "Enter: ";
+        do {
+            cin >> c;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            c = tolower(c);
+            if (c == 'c') return;
+            if (c < 'a' || c > 'c') cout << "Wrong input. Please enter again: ";
+        } while (c < 'a' || c > 'c');
+
         itm = dynamic_cast<Item*>(inventory[i]);
-        if (itm->triggerEvent(this)) {
+        if ((c == 'a' && itm->triggerEvent(this)) || c == 'b') {
             delete inventory[i];
             if (i != n - 1) {
                 for (int j = i; j < n - 1; j++)
