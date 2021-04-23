@@ -13,16 +13,17 @@ private:
     Room *upRoom, *downRoom, *leftRoom, *rightRoom;
     int index;
     bool isVisited, isExit;
-    Object* object; /*contain 1 or multiple objects, including monster, npc, etc*/
+    Object* object; /*contain only 1 object, including monster, npc, etc*/
 public:
     Room(int idx=0, bool iVt=false, bool iEt=false, Object* obj=nullptr) {
-    leftRoom = rightRoom = upRoom = downRoom = nullptr;
-    isVisited = iVt; isExit = iEt; index = idx; 
-    object = obj;
+        leftRoom = rightRoom = upRoom = downRoom = nullptr;
+        isVisited = iVt; isExit = iEt; index = idx; 
+        object = obj;
     }
     ~Room() {}
     
-    void popObject() { delete object; object = nullptr; } /*pop out the specific object, used when the interaction is done*/
+    /*pop out the specific object, used when the interaction is done*/
+    void popObject() { delete object; object = nullptr; } 
 
     /* Set & Get function*/
     void setIndex(int idx) { index = idx; }
@@ -32,7 +33,7 @@ public:
     void setDownRoom(Room* down) { downRoom = down; }
     void setLeftRoom(Room* left) { leftRoom = left; }
     void setRightRoom(Room* right) { rightRoom = right; }
-    void setObjects(Object* obj) { object = obj; }
+    void setObject(Object* obj) { object = obj; }
     int getIndex() { return index; }
     bool getIsVisited() { return isVisited; }
     bool getIsExit() { return isExit; }

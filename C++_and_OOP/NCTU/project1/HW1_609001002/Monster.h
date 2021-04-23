@@ -3,11 +3,9 @@
 
 #include <iostream>
 #include <iomanip>
-#include <cctype>
 #include <string>
 #include <vector>
 #include <random>
-#include "GameCharacter.h"
 #include "Player.h"
 
 using namespace std;
@@ -16,9 +14,8 @@ class Monster: public GameCharacter {
 private:
     random_device rd;
 public:
-    Monster(string name="", int hp=100, int atk=100, int mny=100, int car=10)
-        :GameCharacter(name, "Monster", hp, atk, mny, car) {}
-    
+    Monster(string name="", int maxHp=100, int curHp=100, int atk=100, int mny=100, int car=10)
+        :GameCharacter(name, "Monster", maxHp, curHp, atk, mny, car) {}
     virtual ~Monster() {}
 
     /* Virtual function that you need to complete   */
@@ -28,6 +25,7 @@ public:
     
     bool oddFunction(int);
     void attackFunction(GameCharacter*, GameCharacter*);
+    bool retreatFunction(Player*, Monster*);
 };
 
 #endif // ENEMY_H_INCLUDED

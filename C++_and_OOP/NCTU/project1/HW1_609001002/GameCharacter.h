@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <cctype>
 #include "Object.h"
 
 using namespace std;
@@ -11,10 +12,11 @@ class GameCharacter: public Object {
 private:
     int maxHealth, currentHealth, attack, money, criticalAttackRate;
 public:
-    GameCharacter(string name="", string tag="", int hp=0, int atk=0, int mny=0, int car=0)
-        : Object(name, tag), maxHealth(hp), currentHealth(hp), attack(atk), money(mny), criticalAttackRate(car) {}
-    
+    GameCharacter(string name="", string tag="", int maxHp=0, int curHp=0, int atk=0, int mny=0, int car=0)
+        : Object(name, tag), maxHealth(maxHp), currentHealth(curHp), attack(atk), money(mny), criticalAttackRate(car) {}
     virtual ~GameCharacter() {}
+    
+    int inputFilter(const int);
     
     virtual bool triggerEvent(Object*) override { return true; }
     

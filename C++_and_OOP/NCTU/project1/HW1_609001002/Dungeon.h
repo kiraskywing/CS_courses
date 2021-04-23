@@ -1,11 +1,12 @@
 #ifndef DUNGEON_H_INCLUDED
 #define DUNGEON_H_INCLUDED
 
+// #define SEE_WHOLE_MAP
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cctype>
-#include <exception>
 #include <random>
 #include <fstream>
 #include <sstream>
@@ -14,7 +15,6 @@
 #include "Monster.h"
 #include "NPC.h"
 #include "Room.h"
-// #include "Record.h"
 
 using namespace std;
 
@@ -29,7 +29,6 @@ private:
     Room *boss_room;
     
     random_device rd;
-
 public:
     Dungeon() { 
         map_row = 4; map_col = 5; 
@@ -38,8 +37,9 @@ public:
     }
     ~Dungeon() {}
 
-    int randomInt(int, int);
+    int randomInt(const int, const int);
     int getRandomRoomNumber();
+    int inputFilter(const int);
     
     /* Create a new player, and give him/her basic status */
     void createPlayer();
@@ -55,9 +55,6 @@ public:
     void handleMovement();
 
     void showMap();
-
-    /* Deal with player's iteraction with objects in that room */
-    // void handleEvent(Object*);
 
     /* Deal with all game initial setting       */
     /* Including create player, create map etc  */
@@ -92,17 +89,19 @@ private:
     void saveDungoen(Dungeon*, ofstream&);
     void savePlayer(Player&, ofstream&);
     void saveRooms(vector<Room>&, ofstream&);
-    void saveMonsters(Object*, ofstream&);
-    void saveItems(Object*, ofstream&);
-    void saveNPCs(Object*, ofstream&);
+    void saveMonster(Monster*, ofstream&);
+    void saveItem(Item*, ofstream&);
+    void saveNPC(NPC*, ofstream&);
     void loadDungoen(Dungeon*, vector<Room>&, ifstream&);
     void loadPlayer(Player&, vector<Room>&, ifstream&);
     void loadRooms(vector<Room>&, ifstream&);
-
+    Monster* loadMonster(stringstream&, ifstream&);
+    Item* loadItem(stringstream&, ifstream&);
+    NPC* loadNPC(stringstream&, ifstream&);
 public:
     Record() {}
     void saveToFile(Dungeon*, Player&, vector<Room>&);
-    void loadFromFile(Dungeon*, Player&, vector<Room>&);
+    bool loadFromFile(Dungeon*, Player&, vector<Room>&);
 };
 
 #endif // DUNGEON_H_INCLUDED

@@ -18,19 +18,17 @@ private:
     int inventoryMaxSize, addedAttack, weaponAttack, level;
 public:
     Player(string name="", int hp=250, int atk=50, int addAtk=0, int wpAtk=50, int mny=100, int car=10, int lv=1);
-    
-    virtual ~Player() {}
+    virtual ~Player() { for (Object* obj:inventory) { delete obj; obj = nullptr; } }
 
-    // void addItem(Item* itm) { inventory.push_back(itm); }
-    bool increaseStates(int hp,int atk, int mny);
+    bool updateStatus(int hp,int atk, int mny, int car);
     void changeRoom(Room*);
+    void levelUp();
+    void useInventory();
 
     /* Virtual function that you need to complete   */
     /* In Player, this function should show the     */
     /* status of player.                            */
     virtual bool triggerEvent(Object*) override;
-
-    void levelUp();
 
     /* Set & Get function*/
     void setCurrentRoom(Room* rm) { currentRoom = rm; }
@@ -40,7 +38,7 @@ public:
     void setAddedAttack(int atk) { addedAttack = atk; }
     void setLevel(int lv) { level = lv; }
     void setInventorySize(int n) { inventoryMaxSize = n; }
-    void setInventory(vector<Object*>& itms) { inventory.insert(inventory.end(), itms.begin(), itms.end()); }
+    void setInventory(const vector<Object*>& itms) { inventory.insert(inventory.end(), itms.begin(), itms.end()); }
     Room* getCurrentRoom() { return currentRoom; }
     Room* getPreviousRoom() { return previousRoom; }
     string getWeaponName() { return weaponName; }
@@ -48,8 +46,7 @@ public:
     int getAddedAttack() { return addedAttack; }
     int getLevel() { return level; }
     int getInventorySize() { return inventoryMaxSize; }
-    vector<Object*> getInventory() { return inventory; }
-    void useInventory();
+    const vector<Object*>& getInventory() { return inventory; }
 };
 
 #endif // PLAYER_H_INCLUDED

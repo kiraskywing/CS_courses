@@ -3,17 +3,17 @@
 using namespace std;
 
 Player::Player(string name, int hp, int atk, int addAtk, int wpAtk, int mny, int car,  int lv)
-    : GameCharacter(name, "Player", hp, atk + addAtk + wpAtk, mny, car) {
+    : GameCharacter(name, "Player", hp, hp, atk + addAtk + wpAtk, mny, car) {
            currentRoom = previousRoom = nullptr;
-           weaponName = "Sword";
+           weaponName = "Sword_lv.0";
            inventoryMaxSize = 6; addedAttack = addAtk; weaponAttack = wpAtk; level = lv;
         }  
 
-bool Player::increaseStates(int hp, int addAtk, int mny) {
+bool Player::updateStatus(int hp, int addAtk, int mny, int car) {
     if (hp) {
         int pre_hp = getCurrentHealth(), max_hp = getMaxHealth();
         if (pre_hp == max_hp) {
-            cout << "Your health is already full!" << endl;
+            cout << "Sorry, your health is already full!" << endl;
             return false;
         }
         hp = (hp + pre_hp >= max_hp ? max_hp :hp + pre_hp);
@@ -31,6 +31,10 @@ bool Player::increaseStates(int hp, int addAtk, int mny) {
         mny += getMoney();
         setMoney(mny);
         cout << mny << endl;
+    }
+    if (car) {
+        setCriticalAttackRate(car);
+        cout << "Your crtical attack rate is increased to " << car << '%' << endl;
     }
     return true;
 }
@@ -60,7 +64,7 @@ void Player::levelUp() {
     setMaxHealth(maxHP); setCurrentHealth(curHP);
 
     int atk = getAttack();
-    atk = (atk - addedAttack - weaponAttack) * 2 + addedAttack + weaponAttack;
+    atk = (atk - addedAttack) * 2 + addedAttack;
     setAttack(atk);
 
     triggerEvent(nullptr);
@@ -73,48 +77,33 @@ void Player::useInventory() {
             return;
         }
         
-        cout << endl << "Please chose one item: ";
+        cout << endl << "Choose one item: ";
         Item* itm;
-        int i, n = inventory.size();
-        for (i = 0; i < n; i++) {
-            itm = dynamic_cast<Item*>(inventory[i]);
-            cout << endl << "(" << (char)('a'+i) << ") " << itm->getName() 
+        int j, n = inventory.size();
+        for (j = 0; j < n; j++) {
+            itm = dynamic_cast<Item*>(inventory[j]);
+            cout << endl << "(" << (char)('a'+j) << ") " << itm->getName() 
                  << ": Recover " << itm->getHealth() << " Health";
         }
-        cout << endl << "(" << (char)('a'+i) << ") " << "Back"
+        cout << endl << "(" << (char)('a'+j) << ") " << "Back"
              << endl << "Enter: ";
-
-        char c;
-        do {
-            cin >> c;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-            i = tolower(c) - 'a';
-            if (i > n || i < 0) cout << "Wrong input. Please enter again: ";
-        } while (i > n || i < 0);
-
+        int i = inputFilter(n + 1);
         if (i == n) return;
 
-        cout << endl << "Please chose use, discard or go back: "
+        cout << endl << "Choose use, discard or go back: "
              << endl << "(a) Use" 
              << endl << "(b) Discard"
              << endl << "(c) Back"
              << endl << "Enter: ";
-        do {
-            cin >> c;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
-            c = tolower(c);
-            if (c == 'c') return;
-            if (c < 'a' || c > 'c') cout << "Wrong input. Please enter again: ";
-        } while (c < 'a' || c > 'c');
+        j = inputFilter(3);
+        if (j == 2) return;
 
         itm = dynamic_cast<Item*>(inventory[i]);
-        if ((c == 'a' && itm->triggerEvent(this)) || c == 'b') {
+        if ((j == 0 && itm->triggerEvent(this)) || j == 1) {
             delete inventory[i];
             if (i != n - 1) {
-                for (int j = i; j < n - 1; j++)
-                    inventory[j] = inventory[j + 1];
+                for (int k = i; k < n - 1; k++)
+                    inventory[k] = inventory[k + 1];
             }
             inventory[n - 1] = nullptr;
             inventory.pop_back();

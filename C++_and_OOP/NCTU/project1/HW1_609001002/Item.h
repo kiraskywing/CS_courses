@@ -15,14 +15,13 @@ private:
 public:
     Item(string name="", int hp=0, int atk=0, int mny=0, int car=0)
         : Object(name, "Item"), health(hp), attack(atk), money(mny), criticalAttackRate(car) {}
-    // copy constructor
+    virtual ~Item() {}
 
     /* Virtual function that you need to complete    */
     /* In Item, this function should deal with the   */
     /* pick up action. You should add status to the  */
     /* player.                                       */
     virtual bool triggerEvent(Object*) override;
-    virtual ~Item() {}
 
     /* Set & Get function*/
     void setHealth(int hp) { health = hp; }
