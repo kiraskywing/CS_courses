@@ -21,7 +21,7 @@ public:
     virtual bool triggerEvent(Object*) override { return true; }
     
     bool checkIsDead() { return currentHealth <= 0; }
-    int takeDamage(int dmg) { currentHealth -= dmg; return dmg; }
+    int takeDamage(int dmg) { currentHealth -= (dmg > currentHealth ? currentHealth : dmg); return dmg; }
 
     /* Set & Get function*/
     void setMaxHealth(int maxHp) { maxHealth = maxHp; }

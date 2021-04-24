@@ -93,25 +93,19 @@ void Dungeon::createMap() {
 }
 
 void Dungeon::createNPC() {
-    NPC* npc = new NPC("WeaponShop");
+    NPC* npc = new NPC("ItemShop");
     vector<Object*> itms;
     Item* obj = nullptr;
     for (int i = 0; i < 3; i++) {
         obj = new Item(string("Sword_lv.") + to_string(i + 1), 0, 1000 * pow(2, i), 0, 20 * (1 + i));
         itms.push_back(obj);
     }
-    npc->setCommodity(itms);
-    int npcRM = getRandomRoomNumber();
-    rooms[npcRM].setObject(npc);
-    
-    npc = new NPC("PosionShop");
-    itms.clear();
     for (int i = 0; i < 3; i++) {
         obj = new Item(string("Posion_lv.") + to_string(i + 1), 500 * pow(2, i));
         itms.push_back(obj);
     }
     npc->setCommodity(itms);
-    npcRM = getRandomRoomNumber();
+    int npcRM = getRandomRoomNumber();
     rooms[npcRM].setObject(npc);
 }
 
@@ -243,20 +237,21 @@ void Dungeon::chooseAction() {
     NPC* npc = nullptr;
     Room* curRM = player.getCurrentRoom();
     
-    Object* obj = curRM->getObject();
+    Object* obj = nullptr;
+    obj = curRM->getObject();
     mon = dynamic_cast<Monster*>(obj);
     itm = dynamic_cast<Item*>(obj);
     npc = dynamic_cast<NPC*>(obj);
     
-    if (mon) {
-        mon->triggerEvent(&player);
-        if (mon->checkIsDead()) {
-            cout << "You beat " << mon->getName() << "!" << endl;
-            if (mon->getName() != "Boss") 
-                currentMonsterNumber--;
-            player.updateStatus(0, 0, mon->getMoney(), 0);
+    if (obj) {
+        string objName = obj->getName();
+        if (obj->triggerEvent(&player)) {
+            if (mon && objName != "Boss") currentMonsterNumber--;
+            if (itm)                      currentChestNumber--;
+            
             curRM->popObject();
-            mon = nullptr;
+            obj = nullptr;
+
             if (currentMonsterNumber == 0) {
                 if (currentChestNumber < maxChestNumber) 
                     createChest(maxChestNumber - currentChestNumber);
@@ -264,14 +259,11 @@ void Dungeon::chooseAction() {
                 createMonster();
             }
         }
-        return;
+        else {
+            if (objName.find("Health") == string::npos)
+                player.changeRoom(player.getPreviousRoom());
+        }
     }
-    if (itm && itm->triggerEvent(&player)) {
-        curRM->popObject();
-        itm = nullptr;
-        currentChestNumber--;
-    }
-    if (npc) actions.push_back("Talk to shop");
     
     actions.push_back("Game options");
     
@@ -286,7 +278,6 @@ void Dungeon::chooseAction() {
     if (actions[i][0] == 'M') handleMovement();
     if (actions[i][0] == 'C') { player.triggerEvent(nullptr); showMap(); }
     if (actions[i][0] == 'U') { player.useInventory(); }
-    if (actions[i][0] == 'T') npc->triggerEvent(&player);
     if (actions[i][0] == 'G') {
         cout << endl << "Choose one action: "
              << endl << "(a) Save to file"

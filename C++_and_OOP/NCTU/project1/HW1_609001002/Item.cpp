@@ -3,8 +3,7 @@
 using namespace std;
 
 bool Item::triggerEvent(Object *obj) {
-    class Player* p = dynamic_cast<Player*>(obj);
-    
+    Player* p = dynamic_cast<Player*>(obj);
     string itmName = getName();
     
     if (itmName.find("Sword") != string::npos) {
