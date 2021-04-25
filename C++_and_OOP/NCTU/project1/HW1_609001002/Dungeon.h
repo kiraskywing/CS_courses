@@ -39,7 +39,6 @@ public:
 
     int randomInt(const int, const int);
     int getRandomRoomNumber();
-    int inputFilter(const int);
     
     /* Create a new player, and give him/her basic status */
     void createPlayer();
