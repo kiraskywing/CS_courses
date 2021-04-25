@@ -1,13 +1,5 @@
 #include "Dungeon.h"
 
-using namespace std;
-
-int Dungeon::randomInt(const int start, const int end) {
-    default_random_engine generator(rd());
-    uniform_int_distribution<int> distribution(start, end);
-    return distribution(generator);
-}
-
 int Dungeon::getRandomRoomNumber() {
     int idx;
     Room* curRM = player.getCurrentRoom();
@@ -127,8 +119,6 @@ void Dungeon::createChest(const int n) {
 }
 
 void Dungeon::handleMovement() {
-    showMap();
-    
     cout << endl << "Where do you want to go?" << endl;
     vector<string> moves = {"Move Up", "Move Down", "Move Left", "Move Right"};
     
@@ -162,7 +152,6 @@ void Dungeon::handleMovement() {
     
     curRM = player.getCurrentRoom();
     curRM->setIsVisited(true);
-    showMap();
 }
 
 void Dungeon::showMap() {
@@ -271,6 +260,8 @@ void Dungeon::chooseAction() {
     
     actions.push_back("Game options");
     
+    showMap();
+
     int i;
     cout << endl << "Choose one action: ";
     for (i = 0; i < actions.size(); i++)
