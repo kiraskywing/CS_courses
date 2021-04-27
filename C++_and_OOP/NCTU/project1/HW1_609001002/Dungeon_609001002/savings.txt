@@ -1,0 +1,41 @@
+Dungeon 4 5 3 3 9
+Player K 2000 2000 2020 3200 20 3 8 Sword_lv.1 1000 1220 4 6 5
+Item Posion_lv.0 100 0 0 0
+Item Posion_lv.0 100 0 0 0
+Item Posion_lv.0 100 0 0 0
+Item Posion_lv.0 100 0 0 0
+Item Posion_lv.0 100 0 0 0
+Room 0 1 1 -1 5 -1 1 0 0 0 
+Room 1 1 0 -1 6 0 2 0 1 0 
+Item HealthRecover_lv.3 380 0 0 0
+Room 2 1 0 -1 7 1 3 0 0 0 
+Room 3 1 0 -1 8 2 4 0 0 0 
+Room 4 1 0 -1 9 3 -1 0 0 0 
+Room 5 1 0 0 10 -1 6 0 1 0 
+Item HealthRecover_lv.1 95 0 0 0
+Room 6 1 0 1 11 5 7 0 1 0 
+Item HealthRecover_lv.3 380 0 0 0
+Room 7 1 0 2 12 6 8 0 0 0 
+Room 8 1 0 3 13 7 9 0 0 0 
+Room 9 0 0 4 14 8 -1 1 0 0 
+Monster Boss 3000 3000 1000 1000 20
+Room 10 1 0 5 15 -1 11 1 0 0 
+Monster Slime_lv.4 2250 2250 1500 1500 10
+Room 11 1 0 6 16 10 12 1 0 0 
+Monster Slime_lv.4 2250 2250 1500 1500 10
+Room 12 1 0 7 17 11 13 0 0 0 
+Room 13 1 0 8 18 12 14 0 0 0 
+Room 14 1 0 9 19 13 -1 0 0 1 
+NPC ItemShop 6
+Item Sword_lv.1 0 1000 0 20
+Item Sword_lv.2 0 2000 0 40
+Item Sword_lv.3 0 4000 0 60
+Item Posion_lv.1 500 0 0 0
+Item Posion_lv.2 1000 0 0 0
+Item Posion_lv.3 2000 0 0 0
+Room 15 1 0 10 -1 -1 16 0 0 0 
+Room 16 1 0 11 -1 15 17 0 0 0 
+Room 17 1 0 12 -1 16 18 0 0 0 
+Room 18 1 0 13 -1 17 19 0 0 0 
+Room 19 1 0 14 -1 18 -1 1 0 0 
+Monster Slime_lv.4 2250 2250 1500 1500 10
