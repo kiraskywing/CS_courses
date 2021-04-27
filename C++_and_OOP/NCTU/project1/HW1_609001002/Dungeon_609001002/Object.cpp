@@ -5,7 +5,7 @@ int inputFilter(const int n, string mode) {
     char c;
     do {
         if (mode == "pause") {
-            cout << endl << "Press Enter to continue ...";
+            cout << endl << "Press Enter to continue ... ";
             getline(cin, mode);
             return 0;
         }

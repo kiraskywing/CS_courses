@@ -20,7 +20,7 @@ bool Monster::triggerEvent(Object* obj) {
         cout << endl << "Choose one action:" << endl
                 << "(a) Attack enemy" << endl
                 << "(b) Check status" << endl
-                << "(c) Use inventory" << endl
+                << "(c) Use backpack" << endl
                 << "(d) Retreat" << endl
                 << "Enter: ";
         i = inputFilter(4);
@@ -36,7 +36,7 @@ bool Monster::triggerEvent(Object* obj) {
             }
         }
         else if (i == 1) { obj->triggerEvent(nullptr); inputFilter(0, "pause"); }
-        else if (i == 2) p->useInventory();
+        else if (i == 2) p->useBackpack();
         else { if (retreatFunction(p, this)) return false; }
     }
 

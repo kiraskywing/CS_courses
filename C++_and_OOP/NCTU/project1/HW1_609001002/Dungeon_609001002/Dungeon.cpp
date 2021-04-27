@@ -5,7 +5,7 @@ int Dungeon::getRandomRoomNumber() {
     Room* curRM = player.getCurrentRoom();
     do {
         idx = randomInt(0, map_row * map_col - 1);
-    } while ((curRM && curRM->getIndex() == idx) || rooms[idx].getObject() || rooms[idx].getIsExit());
+    } while ((curRM && curRM->getIndex() == idx) || rooms[idx]->getObject() || rooms[idx]->getIsExit());
 
     return idx;
 }
@@ -20,46 +20,48 @@ void Dungeon::createPlayer() {
     player.setName(s_name);
     vector<Item*> itms;
     Item* obj = nullptr;
-    for (int i = 0; i < player.getInventorySize(); i++) {
+    for (int i = 0; i < player.getBackpackSize(); i++) {
         obj = new Item("Posion_lv.0", 100);
         itms.push_back(obj);
     }
-    player.setInventory(itms);
+    player.setBackpack(itms);
 }
 
 void Dungeon::createMap() {
+    Room* rm = nullptr;
     for (int i = 0; i < map_row * map_col; i++) {
         #ifdef SEE_WHOLE_MAP
-        rooms.push_back(Room(i, true));
+        rm = new Room(i, true);
         #else
-        rooms.push_back(Room(i, false));
+        rm = new Room(i, false);
         #endif
+        rooms.push_back(rm);
     }
     
     for (int i = 0; i < map_row; i++) {
         for (int j = 0; j < map_col; j++) {
-            if (i > 0)           {rooms[j + i * map_col].setUpRoom(&rooms[j + (i - 1) * map_col]);}
-            if (i + 1 < map_row) {rooms[j + i * map_col].setDownRoom(&rooms[j + (i + 1) * map_col]);}
-            if (j > 0)           {rooms[j + i * map_col].setLeftRoom(&rooms[(j - 1) + i * map_col]);}
-            if (j + 1 < map_col) {rooms[j + i * map_col].setRightRoom(&rooms[(j + 1) + i * map_col]);}
+            if (i > 0)           {rooms[j + i * map_col]->setUpRoom(rooms[j + (i - 1) * map_col]);}
+            if (i + 1 < map_row) {rooms[j + i * map_col]->setDownRoom(rooms[j + (i + 1) * map_col]);}
+            if (j > 0)           {rooms[j + i * map_col]->setLeftRoom(rooms[(j - 1) + i * map_col]);}
+            if (j + 1 < map_col) {rooms[j + i * map_col]->setRightRoom(rooms[(j + 1) + i * map_col]);}
         }
     }
 
     /* set player's start position */
     int start_room = getRandomRoomNumber();
-    player.setPreviousRoom(&rooms[start_room]);
-    player.setCurrentRoom(&rooms[start_room]);
-    rooms[start_room].setIsVisited(true);
+    player.setPreviousRoom(rooms[start_room]);
+    player.setCurrentRoom(rooms[start_room]);
+    rooms[start_room]->setIsVisited(true);
 
     /* set boss' position */
     int bossRM = getRandomRoomNumber();
-    boss_room = &rooms[bossRM];
+    boss_room = rooms[bossRM];
     Monster* boss = new Monster("Boss", 3000, 3000, 1000, 1000, 20);
-    rooms[bossRM].setObject(boss);
+    rooms[bossRM]->setObject(boss);
 
     /* set goal position */
     int exitRM = getRandomRoomNumber();
-    rooms[exitRM].setIsExit(true);
+    rooms[exitRM]->setIsExit(true);
     
     /* set NPC */
     createNPC();
@@ -85,7 +87,7 @@ void Dungeon::createNPC() {
     }
     npc->setCommodity(itms);
     int npcRM = getRandomRoomNumber();
-    rooms[npcRM].setObject(npc);
+    rooms[npcRM]->setObject(npc);
 }
 
 void Dungeon::createMonster() {
@@ -97,7 +99,7 @@ void Dungeon::createMonster() {
     for (int i = 0; i < maxMonsterNumber; i++) {
         Monster* mon = new Monster(string("Slime_lv.") + to_string(lv), maxHp, curHp, atk, money, car);
         monRM = getRandomRoomNumber();
-        rooms[monRM].setObject(mon);
+        rooms[monRM]->setObject(mon);
     }
     currentMonsterNumber = maxMonsterNumber;
 }
@@ -113,7 +115,7 @@ void Dungeon::createChest(const int n) {
         if (type == 2) itm = new Item(string("AttackUp_lv.") + to_string(lv), 0, 90 * times);
         if (type == 3) itm = new Item(string("HealthRecover_lv.") + to_string(lv), 95 * times);
         iRM = getRandomRoomNumber();
-        rooms[iRM].setObject(itm);
+        rooms[iRM]->setObject(itm);
     }
     currentChestNumber = maxChestNumber;
 }
@@ -167,8 +169,8 @@ void Dungeon::showMap() {
         for (int j = 0; j < map_col; j++) {
             int cRM = j + i * map_col;
             cout << " | ";
-            if (rooms[cRM].getIsVisited()) {
-                obj = rooms[cRM].getObject();
+            if (rooms[cRM]->getIsVisited()) {
+                obj = rooms[cRM]->getObject();
                 mon = dynamic_cast<Monster*>(obj);
                 itm = dynamic_cast<Item*>(obj);
                 npc = dynamic_cast<NPC*>(obj);
@@ -177,7 +179,7 @@ void Dungeon::showMap() {
                 else if (mon) cout << (mon->getName() == "Boss" ? 'B' : 'M');
                 else if (itm) cout << 'C';
                 else if (npc) cout << 'S';
-                else if (rooms[cRM].getIsExit()) cout << 'G';
+                else if (rooms[cRM]->getIsExit()) cout << 'G';
                 else cout << ' ';
             }
             else cout << '?';
@@ -233,7 +235,7 @@ void Dungeon::chooseAction() {
     if (obj) {
         string objName = obj->getName();
         if (obj->triggerEvent(&player)) {
-            if (mon) { 
+            if (mon && mon->checkIsDead()) { 
                 if (objName != "Boss") currentMonsterNumber--; 
                 inputFilter(0, "pause"); 
             }
@@ -263,14 +265,14 @@ void Dungeon::chooseAction() {
     cout << endl << "Choose one action: "
          << endl << "(a) Move"
          << endl << "(b) Check status"
-         << endl << "(c) Use inventory"
+         << endl << "(c) Use backpack"
          << endl << "(d) Game options"
          << endl << "Enter: ";
     int i = inputFilter(4);
 
     if (i == 0) handleMovement();
     if (i == 1) { player.triggerEvent(nullptr); showMap(); inputFilter(0, "pause"); }
-    if (i == 2) { player.useInventory(); }
+    if (i == 2) { player.useBackpack(); }
     if (i == 3) {
         cout << endl << "Choose one action: "
              << endl << "(a) Save game"
@@ -290,12 +292,14 @@ bool Dungeon::checkGameLogic() {
     
     if (player.checkIsDead()) {
         cout << "You die!" << endl;
+        inputFilter(0, "pause");
         return false;
     }
     if (curRM->getIsExit()) {
         Monster* mon = dynamic_cast<Monster*>(boss_room->getObject());
         if (mon && !mon->checkIsDead()) {
             cout << endl << "You reach the goal, but the Boss is still alive." << endl;
+            inputFilter(0, "pause");
             return true;
         }
         

@@ -1,7 +1,7 @@
 #ifndef DUNGEON_H_INCLUDED
 #define DUNGEON_H_INCLUDED
 
-// #define SEE_WHOLE_MAP
+#define SEE_WHOLE_MAP
 
 #include <iostream>
 #include <string>
@@ -23,18 +23,19 @@ class Record;
 class Dungeon {
 private:
     Player player;
-    vector<Room> rooms;
+    vector<Room*> rooms;
     int map_row, map_col;
     int maxMonsterNumber, maxChestNumber;
     int currentMonsterNumber, currentChestNumber;
     Room *boss_room;
 public:
     Dungeon() { 
-        map_row = 4; map_col = 5; 
+        map_row = 4; map_col = 5;
+        rooms.reserve(map_row * map_col); 
         currentMonsterNumber = maxMonsterNumber = 3;
         currentChestNumber = maxChestNumber = 3;
     }
-    ~Dungeon() {}
+    ~Dungeon() { for (Room* rm : rooms) delete rm; }
 
     int getRandomRoomNumber();
     
