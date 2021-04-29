@@ -1,0 +1,5 @@
+select B.name as 'student name', C.name as 'instructor name' 
+from advisor A
+join student B on A.s_ID = B.ID
+join instructor C on A.i_ID = C.ID
+order by C.name;

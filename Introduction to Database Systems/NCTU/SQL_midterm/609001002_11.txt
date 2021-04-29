@@ -1,0 +1,13 @@
+with subq as 
+(
+select course_id, year, 
+case
+	when grade not null and grade = 'F' then 0.0
+	when grade not null and grade != 'F' then 1.0
+end as rate
+from takes
+where rate not null
+)
+select course_id, floor(sum(rate) / count(*) * 100, 0) as 'pass_rate'
+from subq
+group by course_id;

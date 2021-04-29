@@ -1,0 +1,4 @@
+select A.course_id, B.title as 'course_title', A.prereq_id, C.title as 'prereq_title'
+from prereq A
+join course B on A.course_id = B.course_id
+join course C on A.prereq_id = C.course_id;
