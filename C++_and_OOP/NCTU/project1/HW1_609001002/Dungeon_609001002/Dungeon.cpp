@@ -304,6 +304,7 @@ bool Dungeon::checkGameLogic() {
         }
         
         cout << endl << "Congratulation! Game Clear!" << endl;
+        inputFilter(0, "pause");
         return false;
     }
 

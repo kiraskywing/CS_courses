@@ -14,15 +14,15 @@ private:
     vector<Item*> commodity;
 public:
     NPC(string name="") : GameCharacter(name, "NPC") { commodity.reserve(6); }
-    virtual ~NPC() { for (Item* obj : commodity) delete obj; }
+    virtual ~NPC() { for (Item* obj : commodity) { delete obj; obj = nullptr; } }
+    
+    int chooseCommodity(Player*);
+    void buyCommodity(Player*, int);
     
     /* Virtual function that you need to complete   */
     /* In NPC, this function should deal with the   */
     /* transaction in easy implementation           */
     virtual bool triggerEvent(Object*) override;
-
-    int chooseCommodity(Player*);
-    void buyCommodity(Player*, int);
 
     /* Set & Get function*/
     void setCommodity(const vector<Item*>& itms) { commodity.insert(commodity.end(), itms.begin(), itms.end()); }

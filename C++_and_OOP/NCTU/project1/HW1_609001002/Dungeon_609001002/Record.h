@@ -6,11 +6,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include "Player.h"
-#include "Item.h"
-#include "Monster.h"
-#include "NPC.h"
-#include "Room.h"
 #include "Dungeon.h"
 
 using namespace std;
@@ -33,6 +28,7 @@ private:
     NPC* loadNPC(stringstream&, ifstream&);
 public:
     Record() {}
+    ~Record() {}
     void saveToFile(Dungeon*, Player&, vector<Room*>&);
     bool loadFromFile(Dungeon*, Player&, vector<Room*>&);
 };

@@ -5,6 +5,7 @@ Player::Player(string name, int hp, int atk, int addAtk, int wpAtk, int mny, int
            currentRoom = previousRoom = nullptr;
            weaponName = "Sword_lv.0";
            backpackMaxSize = 6; addedAttack = addAtk; weaponAttack = wpAtk; level = lv;
+           backpack.reserve(backpackMaxSize);
         }  
 Player:: ~Player() { for (Item* itm : backpack) { delete itm; itm = nullptr; } }
 

@@ -1,14 +1,11 @@
 #ifndef DUNGEON_H_INCLUDED
 #define DUNGEON_H_INCLUDED
 
-#define SEE_WHOLE_MAP
+// #define SEE_WHOLE_MAP
 
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cctype>
-#include <fstream>
-#include <sstream>
 #include "Player.h"
 #include "Item.h"
 #include "Monster.h"
@@ -31,11 +28,11 @@ private:
 public:
     Dungeon() { 
         map_row = 4; map_col = 5;
-        rooms.reserve(map_row * map_col); 
         currentMonsterNumber = maxMonsterNumber = 3;
         currentChestNumber = maxChestNumber = 3;
+        rooms.reserve(map_row * map_col);
     }
-    ~Dungeon() { for (Room* rm : rooms) delete rm; }
+    ~Dungeon() { for (Room* rm : rooms) { delete rm; rm = nullptr; } }
 
     int getRandomRoomNumber();
     
