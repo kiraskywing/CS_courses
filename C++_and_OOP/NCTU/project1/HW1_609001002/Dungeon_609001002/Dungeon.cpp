@@ -25,6 +25,12 @@ void Dungeon::createPlayer() {
         itms.push_back(obj);
     }
     player.setBackpack(itms);
+
+    /* set player's start position */
+    int start_room = getRandomRoomNumber();
+    player.setPreviousRoom(rooms[start_room]);
+    player.setCurrentRoom(rooms[start_room]);
+    rooms[start_room]->setIsVisited(true);
 }
 
 void Dungeon::createMap() {
@@ -47,12 +53,6 @@ void Dungeon::createMap() {
         }
     }
 
-    /* set player's start position */
-    int start_room = getRandomRoomNumber();
-    player.setPreviousRoom(rooms[start_room]);
-    player.setCurrentRoom(rooms[start_room]);
-    rooms[start_room]->setIsVisited(true);
-
     /* set boss' position */
     int bossRM = getRandomRoomNumber();
     boss_room = rooms[bossRM];
@@ -70,7 +70,7 @@ void Dungeon::createMap() {
     createMonster();
     
     /* set Treasure */
-    createChest(maxChestNumber);
+    createChest();
 }
 
 void Dungeon::createNPC() {
@@ -104,12 +104,12 @@ void Dungeon::createMonster() {
     currentMonsterNumber = maxMonsterNumber;
 }
 
-void Dungeon::createChest(const int n) {
+void Dungeon::createChest() {
     int lv = player.getLevel();
     int times = pow(2, lv - 1);
     Item* itm = nullptr;
     int type, iRM;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < maxChestNumber - currentChestNumber; i++) {
         type = randomInt(1, 3);
         if (type == 1) itm = new Item(string("Coins_lv.") + to_string(lv), 0, 0, 200 * times);
         if (type == 2) itm = new Item(string("AttackUp_lv.") + to_string(lv), 0, 90 * times);
@@ -247,7 +247,7 @@ void Dungeon::chooseAction() {
 
             if (currentMonsterNumber == 0) {
                 if (currentChestNumber < maxChestNumber) 
-                    createChest(maxChestNumber - currentChestNumber);
+                    createChest();
                 player.levelUp();
                 createMonster();
                 cout << endl << "(Auto)";
@@ -291,7 +291,7 @@ bool Dungeon::checkGameLogic() {
     Room* curRM = player.getCurrentRoom();
     
     if (player.checkIsDead()) {
-        cout << "You die!" << endl;
+        cout << "You loss!" << endl;
         inputFilter(0, "pause");
         return false;
     }

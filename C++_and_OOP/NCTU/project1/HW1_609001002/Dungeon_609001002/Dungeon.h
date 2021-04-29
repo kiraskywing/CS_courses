@@ -28,8 +28,8 @@ private:
 public:
     Dungeon() { 
         map_row = 4; map_col = 5;
-        currentMonsterNumber = maxMonsterNumber = 3;
-        currentChestNumber = maxChestNumber = 3;
+        maxMonsterNumber = 3;
+        maxChestNumber = 3;
         rooms.reserve(map_row * map_col);
     }
     ~Dungeon() { for (Room* rm : rooms) { delete rm; rm = nullptr; } }
@@ -44,7 +44,7 @@ public:
 
     void createNPC();
     void createMonster();
-    void createChest(int);
+    void createChest();
     
     /* Deal with player's moveing action */
     void handleMovement();
