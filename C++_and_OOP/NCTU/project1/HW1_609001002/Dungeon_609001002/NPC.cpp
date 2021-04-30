@@ -32,13 +32,13 @@ int NPC::chooseCommodity(Player* p) {
         itm = commodity[j];
         iName = itm->getName();
         cout << "(" << (char)('a'+j) << ") " << iName << ", ";
-        if (iName.find("Posion") != string::npos) 
+        if (iName.find("Potion") != string::npos) 
             cout << "recover health: " << itm->getHealth() << ", ";
         else {
             cout << "weapon attack: " << itm->getAttack() << ", "
                  << "critical attack rate: " << itm->getCriticalAttackRate() << ", ";
         }
-            cout << "price: " << (iName.find("Posion") != string::npos ? 200 : 400) * (1 + 3 * (j % 3)) << endl; 
+            cout << "price: " << (iName.find("Potion") != string::npos ? 200 : 400) * (1 + 3 * (j % 3)) << endl; 
     }
             cout << "(" << (char)('a'+n) << ") " << "Leave" << endl
                  << "Enter: ";
@@ -48,7 +48,7 @@ int NPC::chooseCommodity(Player* p) {
 void NPC::buyCommodity(Player* p, int i) {
     Item* itm = commodity[i];
     string iName = itm->getName();
-    int price = (iName.find("Posion") != string::npos ? 200 : 400) * (1 + 3 * (i % 3));
+    int price = (iName.find("Potion") != string::npos ? 200 : 400) * (1 + 3 * (i % 3));
     int cur_money = p->getMoney();
     int cur_n = p->getBackpackSize() - p->getBackpack().size();
     
@@ -58,10 +58,10 @@ void NPC::buyCommodity(Player* p, int i) {
         return;
     }
     
-    if (iName.find("Posion") == string::npos && itm->triggerEvent(p)) {
+    if (iName.find("Potion") == string::npos && itm->triggerEvent(p)) {
         p->updateStatus(0, 0, -price, 0);
     }
-    else if (iName.find("Posion") != string::npos) {
+    else if (iName.find("Potion") != string::npos) {
         int n_maxBuy = cur_money / price;
         n_maxBuy = (cur_n < n_maxBuy ? cur_n : n_maxBuy);
         if (n_maxBuy == 0) {
@@ -70,7 +70,7 @@ void NPC::buyCommodity(Player* p, int i) {
             return;
         }
 
-        cout << endl << "How many posions do you want to buy?" << endl
+        cout << endl << "How many potions do you want to buy?" << endl
                      << "Enter number: (max: " << n_maxBuy << ", 0 to cancel)" << endl
                      << "Enter: ";
         i = inputFilter(n_maxBuy + 1);

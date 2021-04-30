@@ -21,7 +21,7 @@ void Dungeon::createPlayer() {
     vector<Item*> itms;
     Item* obj = nullptr;
     for (int i = 0; i < player.getBackpackSize(); i++) {
-        obj = new Item("Posion_lv.0", 100);
+        obj = new Item("Potion_lv.0", 100);
         itms.push_back(obj);
     }
     player.setBackpack(itms);
@@ -52,16 +52,16 @@ void Dungeon::createMap() {
             if (j + 1 < map_col) {rooms[j + i * map_col]->setRightRoom(rooms[(j + 1) + i * map_col]);}
         }
     }
+    
+    /* set goal position */
+    int exitRM = getRandomRoomNumber();
+    rooms[exitRM]->setIsExit(true);
 
     /* set boss' position */
     int bossRM = getRandomRoomNumber();
     boss_room = rooms[bossRM];
     Monster* boss = new Monster("Boss", 3000, 3000, 1000, 1000, 20);
     rooms[bossRM]->setObject(boss);
-
-    /* set goal position */
-    int exitRM = getRandomRoomNumber();
-    rooms[exitRM]->setIsExit(true);
     
     /* set NPC */
     createNPC();
@@ -82,7 +82,7 @@ void Dungeon::createNPC() {
         itms.push_back(obj);
     }
     for (int i = 0; i < 3; i++) {
-        obj = new Item(string("Posion_lv.") + to_string(i + 1), 500 * pow(2, i));
+        obj = new Item(string("Potion_lv.") + to_string(i + 1), 500 * pow(2, i));
         itms.push_back(obj);
     }
     npc->setCommodity(itms);
@@ -255,7 +255,7 @@ void Dungeon::chooseAction() {
             }
         }
         else {
-            if (objName.find("Health") == string::npos)
+            if (obj->getTag() != "Item")
                 player.changeRoom(player.getPreviousRoom());
             inputFilter(0, "pause");
         }
@@ -303,7 +303,7 @@ bool Dungeon::checkGameLogic() {
             return true;
         }
         
-        cout << endl << "Congratulation! Game Clear!" << endl;
+        cout << endl << "You win! Game Clear!" << endl;
         inputFilter(0, "pause");
         return false;
     }

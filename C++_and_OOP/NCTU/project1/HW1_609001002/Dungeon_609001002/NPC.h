@@ -26,7 +26,7 @@ public:
 
     /* Set & Get function*/
     void setCommodity(const vector<Item*>& itms) { commodity.insert(commodity.end(), itms.begin(), itms.end()); }
-    const vector<Item*>& getCommodity() { return commodity; }
+    vector<Item*>& getCommodity() { return commodity; }
 };
 
 #endif // NPC_H_INCLUDED

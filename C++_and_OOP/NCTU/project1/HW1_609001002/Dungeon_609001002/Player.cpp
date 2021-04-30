@@ -51,7 +51,7 @@ bool Player::triggerEvent(Object* obj) {
     cout << "=> Critical attack rate: " << getCriticalAttackRate() << '%' << endl;
     cout << "=> Money: $" << getMoney() << endl;
     cout << "=> Weapon: " << weaponName << endl;
-    cout << "=> Number of posions: " << backpack.size() << endl;
+    cout << "=> Number of potions: " << backpack.size() << endl;
     return true;
 }
 
@@ -104,7 +104,6 @@ void Player::useBackpack() {
                 for (int k = i; k < n - 1; k++)
                     backpack[k] = backpack[k + 1];
             }
-            backpack[n - 1] = nullptr;
             backpack.pop_back();
         }
         inputFilter(0, "pause");

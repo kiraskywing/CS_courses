@@ -109,6 +109,8 @@ void Record::loadDungoen(Dungeon* d, vector<Room*>& rms, ifstream& ifs) {
     d->setCurMonNumber(curMon); 
     d->setCurChestNumber(curCh);
     Room* rm = nullptr;
+    for (Room* rm : rms) { delete rm; }
+    rms.clear();
     for (int i = 0; i < n_rooms; i++) {
         rm = new Room(i, false);
         rms.push_back(rm);
@@ -134,6 +136,9 @@ void Record::loadPlayer(Player& p, vector<Room*>& rms, ifstream& ifs) {
     //      << addedAtk << ' ' << lv << ' ' << maxN << ' ' << curN << endl;
     
     vector<Item*> itms;
+    vector<Item*>& backpack = p.getBackpack();
+    for (Item* itm : backpack) { delete itm; }
+    backpack.clear();
     for (int i = 0; i < curN; i++) 
         itms.push_back(loadItem(ss, ifs));
     p.setBackpack(itms);

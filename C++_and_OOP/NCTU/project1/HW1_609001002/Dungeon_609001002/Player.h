@@ -19,7 +19,7 @@ private:
     string weaponName;
     int backpackMaxSize, addedAttack, weaponAttack, level;
 public:
-    Player(string name="", int hp=250, int atk=50, int addAtk=0, int wpAtk=50, int mny=100, int car=10, int lv=1);
+    Player(string name="", int hp=250, int atk=50, int addAtk=0, int wpAtk=50, int mny=1000, int car=10, int lv=1);
     virtual ~Player();
 
     bool updateStatus(int hp,int atk, int mny, int car);
@@ -48,7 +48,7 @@ public:
     int getAddedAttack() { return addedAttack; }
     int getLevel() { return level; }
     int getBackpackSize() { return backpackMaxSize; }
-    const vector<Item*>& getBackpack() { return backpack; }
+    vector<Item*>& getBackpack() { return backpack; }
 };
 
 #endif // PLAYER_H_INCLUDED
