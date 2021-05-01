@@ -11,7 +11,7 @@ void Record::saveToFile(Dungeon* d, Player& p, vector<Room*>& rms) {
     saveRooms(rms, outFile);
     outFile.close();
     cout << endl << "Save success!";
-    inputFilter(0, "pause");
+    inputOptimizer(0, "pause");
 }
 
 void Record::saveDungoen(Dungeon* d, ofstream& ofs) {
@@ -91,14 +91,14 @@ bool Record::loadFromFile(Dungeon* d, Player& p, vector<Room*>& rms) {
     inFile.close();
     
     cout << endl << "Load success!";
-    inputFilter(0, "pause");
+    inputOptimizer(0, "pause");
     return true;
 }
 
 void Record::loadDungoen(Dungeon* d, vector<Room*>& rms, ifstream& ifs) {
     string line, name;
     getline(ifs, line);
-    istringstream iss(line);
+    stringstream iss(line);
     int r, c, curMon, curCh, n_rooms, bRM;
     iss >> name >> r >> c >> curMon >> curCh >> bRM;
     
@@ -155,7 +155,8 @@ void Record::loadRooms(vector<Room*>& rms, ifstream& ifs) {
         ss >> tag >> idx >> iVt >> iEt >> up >> down >> left >> right 
            >> hasMon >> hasItm >> hasNpc;
         
-        rm->setIndex(idx); rm->setIsVisited(iVt); rm->setIsExit(iEt);
+        // rm->setIndex(idx);
+        rm->setIsVisited(iVt); rm->setIsExit(iEt);
         if (up != -1) rm->setUpRoom(rms[up]); 
         if (down != -1) rm->setDownRoom(rms[down]); 
         if (left != - 1) rm->setLeftRoom(rms[left]); 

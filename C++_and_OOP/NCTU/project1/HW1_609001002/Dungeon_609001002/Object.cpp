@@ -1,12 +1,14 @@
 #include "Object.h"
 
-int inputFilter(const int n, string mode) {
+int inputOptimizer(const int n, string mode) {
     int i;
     char c;
     do {
         if (mode == "pause") {
             cout << endl << "Press Enter to continue ... ";
-            getline(cin, mode);
+            cin >> mode;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
             return 0;
         }
         cin >> c;

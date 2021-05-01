@@ -86,7 +86,7 @@ void Player::useBackpack() {
         }
         cout << endl << "(" << (char)('a'+j) << ") " << "Back"
              << endl << "Enter: ";
-        int i = inputFilter(n + 1);
+        int i = inputOptimizer(n + 1);
         if (i == n) return;
 
         cout << endl << "Choose use, discard or go back: "
@@ -94,7 +94,7 @@ void Player::useBackpack() {
              << endl << "(b) Discard"
              << endl << "(c) Back"
              << endl << "Enter: ";
-        j = inputFilter(3);
+        j = inputOptimizer(3);
         if (j == 2) return;
 
         itm = backpack[i];
@@ -106,6 +106,6 @@ void Player::useBackpack() {
             }
             backpack.pop_back();
         }
-        inputFilter(0, "pause");
+        inputOptimizer(0, "pause");
     }
 }

@@ -131,7 +131,7 @@ void Dungeon::handleMovement() {
     Room* curRM = player.getCurrentRoom();
     int i;
     while (true) {
-        i = inputFilter(4);
+        i = inputOptimizer(4);
         if (i == 0 && curRM->getUpRoom()) {
             player.changeRoom(curRM->getUpRoom()); 
             break;
@@ -200,7 +200,7 @@ void Dungeon::startGame() {
     cout << "Please choose one option: ";
     int i;
     while (true) {
-        i = inputFilter(3);
+        i = inputOptimizer(3);
         if (i == 0) { 
             createMap();
             createPlayer();
@@ -237,10 +237,10 @@ void Dungeon::chooseAction() {
         if (obj->triggerEvent(&player)) {
             if (mon && mon->checkIsDead()) { 
                 if (objName != "Boss") currentMonsterNumber--; 
-                inputFilter(0, "pause"); 
+                inputOptimizer(0, "pause"); 
             }
             if (player.checkIsDead()) { return; }
-            if (itm)                  { currentChestNumber--; inputFilter(0, "pause"); }
+            if (itm)                  { currentChestNumber--; inputOptimizer(0, "pause"); }
             
             curRM->popObject();
             obj = nullptr;
@@ -257,7 +257,7 @@ void Dungeon::chooseAction() {
         else {
             if (obj->getTag() != "Item")
                 player.changeRoom(player.getPreviousRoom());
-            inputFilter(0, "pause");
+            inputOptimizer(0, "pause");
         }
     }
     
@@ -268,10 +268,10 @@ void Dungeon::chooseAction() {
          << endl << "(c) Use backpack"
          << endl << "(d) Game options"
          << endl << "Enter: ";
-    int i = inputFilter(4);
+    int i = inputOptimizer(4);
 
     if (i == 0) handleMovement();
-    if (i == 1) { player.triggerEvent(nullptr); showMap(); inputFilter(0, "pause"); }
+    if (i == 1) { player.triggerEvent(nullptr); showMap(); inputOptimizer(0, "pause"); }
     if (i == 2) { player.useBackpack(); }
     if (i == 3) {
         cout << endl << "Choose one action: "
@@ -280,7 +280,7 @@ void Dungeon::chooseAction() {
              << endl << "(c) Quit"
              << endl << "Enter: ";
         
-        i = inputFilter(3);
+        i = inputOptimizer(3);
         if (i == 0) rec.saveToFile(this, player, rooms);
         if (i == 1) rec.loadFromFile(this, player, rooms);
         if (i == 2) { cout << endl << "Goodbye!" << endl << endl; exit(1); }
@@ -292,19 +292,19 @@ bool Dungeon::checkGameLogic() {
     
     if (player.checkIsDead()) {
         cout << "You loss!" << endl;
-        inputFilter(0, "pause");
+        inputOptimizer(0, "pause");
         return false;
     }
     if (curRM->getIsExit()) {
         Monster* mon = dynamic_cast<Monster*>(boss_room->getObject());
         if (mon && !mon->checkIsDead()) {
             cout << endl << "You reach the goal, but the Boss is still alive." << endl;
-            inputFilter(0, "pause");
+            inputOptimizer(0, "pause");
             return true;
         }
         
         cout << endl << "You win! Game Clear!" << endl;
-        inputFilter(0, "pause");
+        inputOptimizer(0, "pause");
         return false;
     }
 

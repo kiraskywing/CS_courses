@@ -7,7 +7,7 @@ int randomInt(const int start, const int end) {
     uniform_int_distribution<int> distribution(start, end);
     return distribution(generator);
 }
-bool oddFunction(int rate) {
+bool oddFunction(const int rate) {
     return randomInt(1, 100) <= rate;
 }
 
@@ -23,7 +23,7 @@ bool Monster::triggerEvent(Object* obj) {
                 << "(c) Use backpack" << endl
                 << "(d) Retreat" << endl
                 << "Enter: ";
-        i = inputFilter(4);
+        i = inputOptimizer(4);
         
         if (i == 0) {
             cout << endl;
@@ -35,7 +35,7 @@ bool Monster::triggerEvent(Object* obj) {
                 p->updateStatus(0, 0, this->getMoney(), 0);
             }
         }
-        else if (i == 1) { obj->triggerEvent(nullptr); inputFilter(0, "pause"); }
+        else if (i == 1) { obj->triggerEvent(nullptr); inputOptimizer(0, "pause"); }
         else if (i == 2) p->useBackpack();
         else { if (retreatFunction(p, this)) return false; }
     }

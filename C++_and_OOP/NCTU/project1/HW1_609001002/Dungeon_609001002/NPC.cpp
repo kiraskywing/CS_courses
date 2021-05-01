@@ -6,7 +6,7 @@ bool NPC::triggerEvent(Object* obj) {
          << "(a) Buy item\n"
          << "(b) Leave\n"
          << "Enter: ";
-    int i = inputFilter(2);
+    int i = inputOptimizer(2);
     
     if (i == 0) {
         while (true) {
@@ -42,7 +42,7 @@ int NPC::chooseCommodity(Player* p) {
     }
             cout << "(" << (char)('a'+n) << ") " << "Leave" << endl
                  << "Enter: ";
-    return inputFilter(n+1);
+    return inputOptimizer(n+1);
 }
 
 void NPC::buyCommodity(Player* p, int i) {
@@ -54,7 +54,7 @@ void NPC::buyCommodity(Player* p, int i) {
     
     if (cur_money < price) {
         cout << endl << "You don't have enough money." << endl;
-        inputFilter(0, "pause");
+        inputOptimizer(0, "pause");
         return;
     }
     
@@ -66,14 +66,14 @@ void NPC::buyCommodity(Player* p, int i) {
         n_maxBuy = (cur_n < n_maxBuy ? cur_n : n_maxBuy);
         if (n_maxBuy == 0) {
             cout << endl << "Your backpack is full." << endl;
-            inputFilter(0, "pause");
+            inputOptimizer(0, "pause");
             return;
         }
 
         cout << endl << "How many potions do you want to buy?" << endl
                      << "Enter number: (max: " << n_maxBuy << ", 0 to cancel)" << endl
                      << "Enter: ";
-        i = inputFilter(n_maxBuy + 1);
+        i = inputOptimizer(n_maxBuy + 1);
 
         if (i == 0) return;
         
@@ -88,5 +88,5 @@ void NPC::buyCommodity(Player* p, int i) {
         cout << endl << "You got " << i << " " << itm->getName() << endl;
         p->updateStatus(0, 0, -price * i, 0);
     }
-    inputFilter(0, "pause");
+    inputOptimizer(0, "pause");
 }
