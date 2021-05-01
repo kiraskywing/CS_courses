@@ -6,9 +6,7 @@ int inputOptimizer(const int n, string mode) {
     do {
         if (mode == "pause") {
             cout << endl << "Press Enter to continue ... ";
-            cin >> mode;
-            cin.clear();
-            cin.ignore(INT_MAX, '\n');
+            getline(cin, mode);
             return 0;
         }
         cin >> c;

@@ -1,7 +1,7 @@
 #ifndef DUNGEON_H_INCLUDED
 #define DUNGEON_H_INCLUDED
 
-#define SEE_WHOLE_MAP
+// #define SEE_WHOLE_MAP
 
 #include <iostream>
 #include <string>
