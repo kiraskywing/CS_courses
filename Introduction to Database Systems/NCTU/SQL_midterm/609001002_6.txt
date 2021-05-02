@@ -1,4 +1,0 @@
-select dept_name, count(course_id) as 'num_course' 
-from course
-group by dept_name
-order by num_course desc;

@@ -1,6 +1,0 @@
-select B.name as 'name', A.course_id, B.dept_name as 'student dept', C.dept_name as 'course dept'
-from takes A 
-natural join student B
-join course C on A.course_id = C.course_id
-where B.dept_name != C.dept_name
-order by name;

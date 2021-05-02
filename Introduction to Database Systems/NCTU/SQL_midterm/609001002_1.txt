@@ -1,4 +1,0 @@
-select dept_name, avg(salary) as average_salary from department 
-natural left join instructor 
-group by dept_name 
-order by average_salary desc;

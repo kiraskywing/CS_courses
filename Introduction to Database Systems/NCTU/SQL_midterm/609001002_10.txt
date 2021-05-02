@@ -1,4 +1,0 @@
-select sum((end_hr - start_hr) * 60 + (end_min - start_min)) as 'sum(total)' 
-from teaches 
-natural join section natural join instructor natural join time_slot
-where (name, semester, year, day) = ('Srinivasan', 'Fall', 2017, 'W');

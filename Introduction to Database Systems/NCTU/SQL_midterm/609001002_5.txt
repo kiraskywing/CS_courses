@@ -1,4 +1,0 @@
-select name, salary - budget as 'more' from instructor
-natural join department
-where more > 0
-order by more desc;

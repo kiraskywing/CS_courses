@@ -1,4 +1,0 @@
-select title, count (ID) as cnt from takes 
-natural join course 
-where (semester, year) = ('Fall', 2017) 
-group by course_id;
