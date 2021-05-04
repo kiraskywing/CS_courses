@@ -1,0 +1,24 @@
+You need to use the technique of downcasting in your assignment Dungeon. So let's practice downcasting by casting the base class to derived class.
+
+Input Format
+
+The first line is the cat's name and age. The second line is the dog's name and age.
+
+Constraints
+
+Cast the base class to derived class. Do not manipulate the main function. Do not use virtual funciton.
+
+Output Format
+
+Print the info of the cat and the dog. Print the output by using printInfo.
+
+Sample Input 0
+Robin 9
+Ted 4
+
+Sample Output 0
+Cat(Robin, 9)
+Dog(Ted, 4)
+
+Explanation 0
+if dynamic_cast fails it returns 0 when using pointer.

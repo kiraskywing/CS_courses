@@ -1,0 +1,54 @@
+In this lab, we're going to implement 4 basic linked list's operation.
+
+push(int value) : Push a node at the tail of linked list
+
+insert(int pos, int value) : Insert a node at the given position in the linked list, if given position is bigger than the length of the list, output "insert fail".
+
+remove(int pos) : Remove a node at the given position in the linked list, if given position is bigger than the length of the list, output "remove fail".
+
+find(int value) : Find the position of the node which it's value equals given number, if there doesn't exist such node, return -1.
+
+Input Format
+
+On the first line of input is a single positive integer 𝑛, telling the number of operations to follow.
+
+You don't need to handle input.
+
+Constraints
+1 < n <= 50
+
+Output Format
+You don't need to handle output.
+
+Sample Input 0
+18
+i 0 3
+p 7
+?
+i 1 5
+?
+i 3 9
+?
+f 4
+f 5
+r 2
+r 9
+?
+i 2 4
+?
+r 0
+?
+r 2
+?
+
+Sample Output 0
+3, 7
+3, 5, 7
+3, 5, 7, 9
+-1
+1
+remove fail
+3, 5, 9
+3, 5, 4, 9
+5, 4, 9
+5, 4
