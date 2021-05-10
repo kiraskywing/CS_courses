@@ -1,0 +1,21 @@
+There is a buffer which stores the requests in recent 5000 milliseconds. The request will be removed if it stays more than 5000 milliseconds in the buffer.
+In other words, if a requrest arrives at the x th milliseconds, it stays at the buffer during [x, x+5000](both x and x+5000 are included) millisecond.
+If there is a new request, the buffer will first store the request, and then output the count of the requests which are currently in the buffer.
+Please print the count of the requests which are currently in the buffer.
+
+Input Format
+The first line contains an integer which is the count of all requests.
+The second line contains integers in ascending order. Each integer represents the time each request arrives. The time is between [0, 20000](both 0 and 20000 are included). The requests arrive sequentially, so the two requests never arrive at the same time.
+
+Constraints
+Please use queue to implement.
+
+Output Format
+Please print the count of the requests which are currently in the buffer after each request stores in the buffer.
+
+Sample Input 0
+7
+0 1 100 5000 5001 15000 19999
+
+Sample Output 0
+1 2 3 4 4 1 2
