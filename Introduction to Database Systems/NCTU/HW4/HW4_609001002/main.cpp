@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
@@ -10,6 +9,7 @@ struct Node {
     Node **children;
     
     Node(int, int);
+    ~Node() { delete [] keys; }
 };
 
 class bPlusTree {
@@ -18,12 +18,14 @@ private:
     Node* root;
 public:
     bPlusTree(int n): maxChildrenNumber(n), maxKeyNumber(n - 1), root(nullptr) {}
+    ~bPlusTree() { destruct(root); }
     void insert(int);
     void insertInternal(Node*, Node*, int);
 
-    // void search(int);
+    void search(int);
     void print(Node*, int);
     Node* getRoot() { return root; }
+    void destruct(Node*);
 };
 
 int main() {
@@ -41,7 +43,8 @@ int main() {
         }
         else if (mode == 's') {
             cin >> value;
-            // BPtree.search(value);
+            BPtree.search(value);
+            cout << endl;
         }
         else if (mode == 'p') {
             BPtree.print(BPtree.getRoot(), 0);
@@ -57,7 +60,7 @@ Node::Node(int maxKeyNumber, int maxChildrenNumber) {
     keys = new int[maxKeyNumber];
     parent = next = nullptr;
     children = new Node*[maxChildrenNumber];
-    fill(children, children + maxChildrenNumber, nullptr);
+    for (int i = 0; i < maxChildrenNumber; i++) children[i] = nullptr;
     nodeSize = 0;
 } 
 
@@ -208,4 +211,34 @@ void bPlusTree::print(Node* cur, int level) {
         for (int i = 0; i < cur->nodeSize + 1; i++) 
             if (cur->children[i]) print(cur->children[i], level + 1);
     }
+}
+void bPlusTree::search(int target) {
+    bool found = false;
+    Node* cur = root;
+    
+    if (!cur) cout << "()" << endl;
+
+    while (cur) {
+        cout << '(';
+        for (int i = 0; i < cur->nodeSize; i++) {
+            if (cur->isLeaf && cur->keys[i] == target) found = true;
+            cout << cur->keys[i] << (i < cur->nodeSize - 1 ? " " : "");
+        }
+        cout << ')' << endl;
+        if (found) break;
+        
+        int childPos = 0;
+        while (childPos < cur->nodeSize && cur->keys[childPos] <= target)
+            childPos++;
+        cur = cur->children[childPos];
+    }
+
+    cout << (found ? "Found" : "QAQ") << endl;
+}
+void bPlusTree::destruct(Node* cur) {
+    if (!cur) return;
+    
+    for (int i = 0; i < cur->nodeSize + 1; i++) 
+        destruct(cur->children[i]);
+    delete cur;
 }
