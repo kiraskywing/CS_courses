@@ -1,31 +1,29 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-class bPlusTree {
-private:
-    int maxChildrenNumber;
-    Node* root;
-public:
-    bPlusTree(int n): maxChildrenNumber(n) {}
-    Node* insert(Node*, int);
-    void search(Node*, int);
-    void print();
-
-    Node* getRoot() { return root; }
+struct Node {
+    bool isLeaf;
+    int *keys, nodeSize;
+    Node *parent, *next;
+    Node **children;
+    
+    Node(int, int);
 };
 
-class Node {
+class bPlusTree {
 private:
-    int currentChildrenNumber;
-    vector<int> values;
-    vector<Node*> children;
-    Node* nextNode;
+    int maxChildrenNumber, maxKeyNumber;
+    Node* root;
 public:
-    Node(int);
-    void setValue(int);
-    vector<int>& getValues() { return values; }
+    bPlusTree(int n): maxChildrenNumber(n), maxKeyNumber(n - 1), root(nullptr) {}
+    void insert(int);
+    void insertInternal(Node*, Node*, int);
+
+    // void search(int);
+    void print(Node*, int);
+    Node* getRoot() { return root; }
 };
 
 int main() {
@@ -39,42 +37,175 @@ int main() {
     while (mode != 'q') {
         if (mode == 'i') {
             cin >> value;
-            BPtree.insert(BPtree.getRoot(), value);
+            BPtree.insert(value);
         }
         else if (mode == 's') {
             cin >> value;
-            BPtree.search(BPtree.getRoot(), value);
+            // BPtree.search(value);
         }
         else if (mode == 'p') {
-            BPtree.print();
+            BPtree.print(BPtree.getRoot(), 0);
+            cout << endl;
         }
+        cin >> mode;
     }
 
     return 0;
 }
 
+Node::Node(int maxKeyNumber, int maxChildrenNumber) {
+    keys = new int[maxKeyNumber];
+    parent = next = nullptr;
+    children = new Node*[maxChildrenNumber];
+    fill(children, children + maxChildrenNumber, nullptr);
+    nodeSize = 0;
+} 
 
-Node* bPlusTree::insert(Node* node, int insertValue) {
+void bPlusTree::insert(int keyToInsert) {
     if (!root) {
-        root = new Node(insertValue);
-        return root;
+        root = new Node(maxKeyNumber, maxChildrenNumber);
+        root->isLeaf = true;
+        root->keys[0] = keyToInsert;
+        root->nodeSize++;
+        return;
     }
-    vector<int>& curNodeValues = node->getValues();
-    int n_nodeValues = curNodeValues.size();
-    for (int i = 0; i < n_nodeValues - 1; i++) {
-        if (i == 0 && insertValue < curNodeValues[i + 1]) {
-
-        }
-        else if (i != n_nodeValues - 2 && curNodeValues[i] < insertValue && insertValue < curNodeValues[i + 1]) {
-
-        }
-    }
-
     
-}
+    Node *cur = root;
+    while (!cur->isLeaf) {
+        int i = 0;
+        while (i < cur->nodeSize && keyToInsert > cur->keys[i])
+            i++;
+        cur = cur->children[i];
+    }
 
-Node::Node(int insertValue) {
-    values.push_back(insertValue);
-    children = vector<Node*>(2, nullptr);
-    nextNode = nullptr;
+    if (cur->nodeSize < maxKeyNumber) {
+        int left = 0;
+        while (left < cur->nodeSize && keyToInsert > cur->keys[left])
+            left++;
+        
+        for (int right = cur->nodeSize; right > left; right--) 
+            cur->keys[right] = cur->keys[right - 1];
+        
+        cur->keys[left] = keyToInsert;
+        cur->nodeSize++;
+    } 
+    else {
+        int totalSize = maxKeyNumber + 1;
+        int tempKeys[totalSize];
+        int insertPos = 0;
+
+        while (insertPos < maxKeyNumber && keyToInsert > cur->keys[insertPos])
+            insertPos++;
+        
+        for (int i = 0, j = 0; i < totalSize; i++) 
+            tempKeys[i] = (i == insertPos ? keyToInsert : cur->keys[j++]);
+        
+        Node* newLeaf = new Node(maxKeyNumber, maxChildrenNumber);
+        newLeaf->isLeaf = true;
+        
+        cur->nodeSize = totalSize / 2;
+        newLeaf->nodeSize = totalSize - totalSize / 2;
+        for (int i = 0, j = 0, k = 0; i < totalSize; i++) {
+            if (i < totalSize / 2) 
+                cur->keys[j++] = tempKeys[i];
+            else 
+                newLeaf->keys[k++] = tempKeys[i];
+        }
+
+        newLeaf->next = cur->next;
+        cur->next = newLeaf;
+
+        if (cur == root) {
+            root = new Node(maxKeyNumber, maxChildrenNumber);
+            root->keys[0] = newLeaf->keys[0];
+            root->children[0] = cur;
+            root->children[1] = newLeaf;
+            cur->parent = root;
+            newLeaf->parent = root;
+            root->isLeaf = false;
+            root->nodeSize++;
+        }
+        else {
+            newLeaf->parent = cur->parent;
+            insertInternal(cur->parent, newLeaf, newLeaf->keys[0]);
+        }
+    }
+}
+void bPlusTree::insertInternal(Node* cur, Node* child, int keyToInsert) {
+    if (cur->nodeSize < maxKeyNumber) {
+        int left = 0;
+        while (left < cur->nodeSize && keyToInsert > cur->keys[left])
+            left++;
+        
+        for (int right = cur->nodeSize; right > left; right--) {
+            cur->keys[right] = cur->keys[right - 1];
+            cur->children[right + 1] = cur->children[right];
+        }
+        cur->keys[left] = keyToInsert;
+        cur->nodeSize++;
+        cur->children[left + 1] = child;
+    }
+    else {
+        int tempKeys[maxKeyNumber + 1];
+        Node* tempChildren[maxChildrenNumber + 1];
+        tempChildren[0] = cur->children[0];
+
+        int insertPos = 0;
+        while (insertPos < maxKeyNumber && keyToInsert > cur->keys[insertPos])
+            insertPos++;
+        
+        for (int i = 0, j = 0; i < maxKeyNumber + 1; i++) {
+            if (i == insertPos) {
+                tempKeys[i] = keyToInsert;
+                tempChildren[i + 1] = child;
+            }
+            else {
+                tempKeys[i] = cur->keys[j];
+                tempChildren[i + 1] = cur->children[j + 1];
+                j++;
+            }
+        }
+
+        Node* newInternal = new Node(maxKeyNumber, maxChildrenNumber);
+        newInternal->isLeaf = false;
+        cur->nodeSize = (maxKeyNumber + 1) / 2;
+        newInternal->nodeSize = maxKeyNumber - (maxKeyNumber + 1) / 2;
+        
+        newInternal->children[0] = tempChildren[cur->nodeSize + 1];
+        newInternal->children[0]->parent = newInternal;
+        for (int i = 0, j = cur->nodeSize + 1; i < newInternal->nodeSize; i++, j++) {
+            newInternal->keys[i] = tempKeys[j];
+            newInternal->children[i + 1] = tempChildren[j + 1];
+            newInternal->children[i + 1]->parent = newInternal;
+        }
+
+        if (cur == root) {
+            root = new Node(maxKeyNumber, maxChildrenNumber);
+            root->keys[0] = tempKeys[cur->nodeSize];
+            root->children[0] = cur;
+            root->children[1] = newInternal;
+            cur->parent = root;
+            newInternal->parent = root;
+            root->isLeaf = false;
+            root->nodeSize++;
+        }
+        else {
+            newInternal->parent = cur->parent;
+            insertInternal(cur->parent, newInternal, cur->keys[cur->nodeSize]);
+        }
+    }
+}
+void bPlusTree::print(Node* cur, int level) {
+    string tab = string(level * 2, ' ');
+    cout << tab << '(';
+    if (cur) {
+        for (int i = 0; i < cur->nodeSize; i++)
+            cout << cur->keys[i] << (i < cur->nodeSize - 1 ? " " : "");
+    }
+    cout << ')' << endl;
+
+    if (cur) {
+        for (int i = 0; i < cur->nodeSize + 1; i++) 
+            if (cur->children[i]) print(cur->children[i], level + 1);
+    }
 }
