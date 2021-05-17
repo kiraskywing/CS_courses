@@ -1,0 +1,32 @@
+A binary search tree is a tree that contains numerous values. The value is stored in a basic unit “node” to construct a tree. You have to construct a binary search tree in this lab and print out value in the post-order form.
+
+Input Format
+The input is a sequence of node that you need to insert one by one. All of the nodes are integers.
+
+Constraints
+The length of the input sequence will be less than 1000.
+
+Output Format
+The output is the post-order form of the binary search tree.
+
+Sample Input 0
+50
+35
+20
+5
+25
+45
+75
+55
+65
+
+Sample Output 0
+5
+25
+20
+45
+35
+65
+55
+75
+50
