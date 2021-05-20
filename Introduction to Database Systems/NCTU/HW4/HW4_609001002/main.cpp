@@ -295,7 +295,7 @@ void bPlusTree::remove(int target) {
     }
 
     cout << "Remove " << target << " from leaf node successfully" << endl;
-    if (cur->nodeSize >= (maxKeyNumber + 1) / 2) {
+    if (cur->nodeSize >= (maxKeyNumber + 1) / 2 - 1) {
         updateParent(cur->parent, cur, posToBeRemoved, target);
         return;
     }
@@ -317,7 +317,7 @@ void bPlusTree::remove(int target) {
     }
     if (rightSibling <= cur->parent->nodeSize) {
         Node* rightNode = cur->parent->children[rightSibling];
-        if (rightNode->nodeSize >= (maxKeyNumber + 1) / 2 + 1) {
+        if (rightNode->nodeSize > (maxKeyNumber + 1) / 2 - 1) {
             cur->nodeSize++;
             cur->keys[cur->nodeSize - 1] = rightNode->keys[0];
             rightNode->nodeSize--;
@@ -441,9 +441,14 @@ void bPlusTree::updateParent(Node* cur, Node* child, int pos, int target) {
     int nextToUpdate;
     int curToUpdate = child->keys[pos];
     while (cur && pos == 0 && curToUpdate != target) {
-        int i = 1;
+        int i = 0;
         while (i < cur->nodeSize + 1 && cur->children[i] != child)
             i++;
+        if (i == 0) {
+            child = cur;
+            cur = child->parent;
+            continue;
+        }
         nextToUpdate = cur->keys[i - 1];
         cur->keys[i - 1] = curToUpdate;
         pos = i - 1;
