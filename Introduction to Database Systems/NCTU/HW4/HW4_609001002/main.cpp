@@ -312,7 +312,7 @@ void bPlusTree::remove(int target) {
                 cur->keys[i] = cur->keys[i - 1];
             cur->nodeSize++;
             cur->keys[0] = leftNode->keys[leftNode->nodeSize - 1];
-            cout << "Transfer " << cur->keys[0] << " from left to right" << endl;
+            cout << "Transfer " << cur->keys[0] << " from left leaf to cur leaf" << endl;
             leftNode->nodeSize--;
             updateParent(cur->parent, cur, 0);
             return;
@@ -323,7 +323,7 @@ void bPlusTree::remove(int target) {
         if (rightNode->nodeSize > (degree - 1) / 2) {
             cur->nodeSize++;
             cur->keys[cur->nodeSize - 1] = rightNode->keys[0];
-            cout << "Transfer " << rightNode->keys[0] << " from right to left" << endl;
+            cout << "Transfer " << rightNode->keys[0] << " from right leaf to cur leaf" << endl;
             rightNode->nodeSize--;
             for (int i = 0; i < rightNode->nodeSize; i++)
                 rightNode->keys[i] = rightNode->keys[i + 1];
@@ -338,7 +338,8 @@ void bPlusTree::remove(int target) {
             leftNode->keys[i] = cur->keys[j];
         leftNode->nodeSize += cur->nodeSize;
         leftNode->next = cur->next;
-        cout << "Merging right leaf into left leaf" << endl;
+        cout << "Merging cur leaf into left leaf" << endl;
+        updateParent(cur->parent, leftNode, 0);
         removeInternal(cur->parent, cur, cur->parent->keys[leftSibling]);
         delete cur;
     } else if (rightSibling <= cur->parent->nodeSize) {
@@ -347,7 +348,8 @@ void bPlusTree::remove(int target) {
             cur->keys[i] = rightNode->keys[j];
         cur->nodeSize += rightNode->nodeSize;
         cur->next = rightNode->next;
-        cout << "Merging left leaf into right leaf" << endl;
+        cout << "Merging right leaf into cur leaf" << endl;
+        updateParent(cur->parent, cur, 0);
         removeInternal(cur->parent, rightNode, cur->parent->keys[rightSibling - 1]);
         delete rightNode;
     }
@@ -380,7 +382,7 @@ void bPlusTree::removeInternal(Node* cur, Node* child, int target) {
     }
     cur->nodeSize--;
     if (cur->nodeSize >= (degree - 1) / 2 || cur == root) {
-        updateParent(cur, cur->children[pos + 1], 0);
+        updateParent(cur->parent, cur, pos);
         return;
     }
 
@@ -394,12 +396,17 @@ void bPlusTree::removeInternal(Node* cur, Node* child, int target) {
         if (leftNode->nodeSize > (degree - 1) / 2) {
             for (int i = cur->nodeSize; i > 0; i--) 
                 cur->keys[i] = cur->keys[i - 1];
+            
             cur->keys[0] = cur->parent->keys[leftSibling];
             cur->parent->keys[leftSibling] = leftNode->keys[leftNode->nodeSize - 1];
+            
             for (int i = cur->nodeSize + 1; i > 0; i--)
                 cur->children[i] = cur->children[i - 1];
+            
             cur->children[0] = leftNode->children[leftNode->nodeSize];
-            cout << "Transfer " << cur->keys[0] << " from left to right" << endl;
+            cur->children[0]->parent = cur;
+            
+            cout << "Transfer " << cur->keys[0] << " from left node to cur node" << endl;
             cur->nodeSize++;
             leftNode->nodeSize--;
             updateParent(cur->parent, cur, 0);
@@ -409,15 +416,20 @@ void bPlusTree::removeInternal(Node* cur, Node* child, int target) {
     if (rightSibling <= cur->parent->nodeSize) {
         Node* rightNode = cur->parent->children[rightSibling];
         if (rightNode->nodeSize > (degree - 1) / 2) {
-            cur->keys[cur->nodeSize] = cur->parent->keys[pos];
-            cur->parent->keys[pos] = rightNode->keys[0];
+            cur->keys[cur->nodeSize] = cur->parent->keys[rightSibling - 1];
+            cur->parent->keys[rightSibling - 1] = rightNode->keys[0];
+            
             for (int i = 0; i < rightNode->nodeSize - 1; i++)
                 rightNode->keys[i] = rightNode->keys[i + 1];
+            
             cur->children[cur->nodeSize + 1] = rightNode->children[0];
+            cur->children[cur->nodeSize + 1]->parent = cur;
+            
             for (int i = 0; i < rightNode->nodeSize; i++)
                 rightNode->children[i] = rightNode->children[i + 1];
             rightNode->children[rightNode->nodeSize] = nullptr;
-            cout << "Transfer " << rightNode->keys[0] << " from right to left" << endl;
+            
+            cout << "Transfer " << rightNode->keys[0] << " from right ndoe to cur node" << endl;
             cur->nodeSize++;
             rightNode->nodeSize--;
             updateParent(cur->parent, rightNode, 0);
@@ -430,10 +442,13 @@ void bPlusTree::removeInternal(Node* cur, Node* child, int target) {
         leftNode->keys[leftNode->nodeSize] = cur->parent->keys[leftSibling];
         for (int i = leftNode->nodeSize + 1, j = 0; j < cur->nodeSize; i++, j++)
             leftNode->keys[i] = cur->keys[j];
-        for (int i = leftNode->nodeSize + 1, j = 0; j < cur->nodeSize + 1; i++, j++)
+        for (int i = leftNode->nodeSize + 1, j = 0; j < cur->nodeSize + 1; i++, j++) {
             leftNode->children[i] = cur->children[j];
+            leftNode->children[i]->parent = leftNode;
+        }
         leftNode->nodeSize += cur->nodeSize + 1;
-        cout << "Merging right node into left node" << endl;
+        cout << "Merging cur node into left node" << endl;
+        updateParent(cur->parent, leftNode, 0);
         removeInternal(cur->parent, cur, cur->parent->keys[leftSibling]);
         delete cur;
     } else if (rightSibling <= cur->parent->nodeSize) {
@@ -441,18 +456,24 @@ void bPlusTree::removeInternal(Node* cur, Node* child, int target) {
         cur->keys[cur->nodeSize] = cur->parent->keys[rightSibling - 1];
         for (int i = cur->nodeSize + 1, j = 0; j < rightNode->nodeSize; i++, j++)
             cur->keys[i] = rightNode->keys[j];
-        for (int i = cur->nodeSize + 1, j = 0; j < rightNode->nodeSize + 1; i++, j++)
+        for (int i = cur->nodeSize + 1, j = 0; j < rightNode->nodeSize + 1; i++, j++) {
             cur->children[i] = rightNode->children[j];
+            cur->children[i]->parent = cur;
+        }
         cur->nodeSize += rightNode->nodeSize + 1;
-        cout << "Merging right node into left node" << endl;
+        cout << "Merging right node into cur node" << endl;
+        updateParent(cur->parent, cur, 0);
         removeInternal(cur->parent, rightNode, cur->parent->keys[rightSibling - 1]);
         delete rightNode;
     }
 }
 void bPlusTree::updateParent(Node* cur, Node* child, int pos) {
-    while (child && !child->isLeaf)
-        child = child->children[0];
-    int curToUpdate = child->keys[0];
+    Node* minNode = child;
+    while (minNode && !minNode->isLeaf)
+        minNode = minNode->children[0];
+    // while (child && !child->isLeaf)
+    //     child = child->children[0];
+    int curToUpdate = minNode->keys[0];
     while (cur && pos == 0) {
         int i = 0;
         while (i < cur->nodeSize + 1 && cur->children[i] != child)
@@ -466,7 +487,7 @@ void bPlusTree::updateParent(Node* cur, Node* child, int pos) {
         pos = i - 1;
 
         if (pos == 0) {
-            Node* minNode = cur->children[0];
+            minNode = cur->children[0];
             while (minNode && !minNode->isLeaf)
                 minNode = minNode->children[0];
             curToUpdate = minNode->keys[0];
