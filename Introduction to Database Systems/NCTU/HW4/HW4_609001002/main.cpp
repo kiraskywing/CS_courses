@@ -471,9 +471,8 @@ void bPlusTree::updateParent(Node* cur, Node* child, int pos) {
     Node* minNode = child;
     while (minNode && !minNode->isLeaf)
         minNode = minNode->children[0];
-    // while (child && !child->isLeaf)
-    //     child = child->children[0];
     int curToUpdate = minNode->keys[0];
+    
     while (cur && pos == 0) {
         int i = 0;
         while (i < cur->nodeSize + 1 && cur->children[i] != child)
