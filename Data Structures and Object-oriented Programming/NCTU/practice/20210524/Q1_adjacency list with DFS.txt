@@ -1,0 +1,21 @@
+In this challenge, the input is a adjacency matrix of a undirected graph, you need to compute its connected component labeling using DFS.
+
+Input Format
+The first line N is the number of the graph's vertices. The second line is the size NxN adjacency matrix.
+
+Output Format
+Please print all the connected components, show the vertices in each connected component in one line. You also need to print the isolated nodes as a connected component. Remember to order the vertices from least to greatest for each connected component.
+
+Sample Input 0
+6
+0 0 1 0 0 0
+0 0 0 0 0 1
+1 0 0 0 1 0
+0 0 0 0 0 0
+0 0 1 0 0 0
+0 1 0 0 0 0
+
+Sample Output 0
+0 2 4 
+1 5 
+3 
