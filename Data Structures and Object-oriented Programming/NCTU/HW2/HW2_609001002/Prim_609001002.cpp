@@ -10,25 +10,25 @@
 using namespace std;
 
 struct Node {
-    int index, weight;
+    int weight;
     bool visited;
     Node* parent;
-    Node(int i): index(i), weight(INT_MAX), visited(false), parent(nullptr) {}
+    Node(): weight(INT_MAX), visited(false), parent(nullptr) {}
 };
 typedef pair<int, int> iPair;
 
 int main() {
     /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-    int m, n;
-    cin >> m >> n;
+    int numberOfVertices, numberOfEdges;
+    cin >> numberOfVertices >> numberOfEdges;
     
     vector<Node> vertices;
-    for (int i = 0; i < m; i++)
-        vertices.push_back(Node(i));
+    for (int i = 0; i < numberOfVertices; i++)
+        vertices.push_back(Node());
 
-    vector<vector<iPair>> edges(m);
+    vector<vector<iPair>> edges(numberOfVertices);
     int n1, n2, cost;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < numberOfEdges; i++) {
         cin >> n1 >> n2 >> cost;
         edges[n1].push_back(make_pair(n2, cost));
         edges[n2].push_back(make_pair(n1, cost));
@@ -59,7 +59,7 @@ int main() {
     }
 
     int res = 0;
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < numberOfVertices; i++)
         res += vertices[i].weight;
     cout << res << endl;
 

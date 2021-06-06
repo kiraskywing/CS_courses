@@ -6,35 +6,35 @@
 using namespace std;
 
 struct Edge {
-    int node1, node2, cost;
-    Edge(int a, int b, int c): node1(a), node2(b), cost(c) {}
+    int vertex1, vertex2, cost;
+    Edge(int a, int b, int c): vertex1(a), vertex2(b), cost(c) {}
 };
-struct Subset {
+struct Vertex {
     int parent, rank;
-    Subset(int i): parent(i), rank(0) {}
+    Vertex(int i): parent(i), rank(0) {}
 };
 class UnionFind {
 private:
-    vector<Subset> sets;
+    vector<Vertex> vertices;
 public:
     UnionFind(int n) {
         for (int i = 0; i < n; i++)
-            sets.push_back(Subset(i));
+            vertices.push_back(Vertex(i));
     }
     int Find(int i) {
-        if (sets[i].parent != i)
-            sets[i].parent = Find(sets[i].parent);
-        return sets[i].parent;
+        if (vertices[i].parent != i)
+            vertices[i].parent = Find(vertices[i].parent);
+        return vertices[i].parent;
     }
     void Union(int x, int y) {
         int xRoot = Find(x), yRoot = Find(y);
-        if (sets[xRoot].rank < sets[yRoot].rank)
-            sets[xRoot].parent = yRoot;
-        else if (sets[xRoot].rank > sets[yRoot].rank)
-            sets[yRoot].parent = xRoot;
+        if (vertices[xRoot].rank < vertices[yRoot].rank)
+            vertices[xRoot].parent = yRoot;
+        else if (vertices[xRoot].rank > vertices[yRoot].rank)
+            vertices[yRoot].parent = xRoot;
         else {
-            sets[yRoot].parent = xRoot;
-            sets[xRoot].rank++;
+            vertices[yRoot].parent = xRoot;
+            vertices[xRoot].rank++;
         }
     }
 };
@@ -53,14 +53,14 @@ int main() {
         edges.push_back(Edge(n1, n2, cost));
     }
 
-    sort(edges.begin(), edges.end(), [](Edge e1, Edge e2) { return e1.cost < e2.cost; });
+    sort(edges.begin(), edges.end(), [](Edge& e1, Edge& e2) { return e1.cost < e2.cost; });
 
     vector<Edge> res;
     int i_res = 0, i_edges = 0;
     while (i_res < numberOfVertices - 1 && i_edges < numberOfEdges) {
         Edge& cur = edges[i_edges++];
         
-        int root1 = uf.Find(cur.node1), root2 = uf.Find(cur.node2);
+        int root1 = uf.Find(cur.vertex1), root2 = uf.Find(cur.vertex2);
         if (root1 != root2) {
             res.push_back(cur);
             i_res++;
