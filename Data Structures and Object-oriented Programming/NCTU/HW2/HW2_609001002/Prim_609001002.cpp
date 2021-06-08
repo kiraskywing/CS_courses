@@ -9,11 +9,11 @@
 
 using namespace std;
 
-struct Node {
+struct Vertex {
     int weight;
     bool visited;
-    Node* parent;
-    Node(): weight(INT_MAX), visited(false), parent(nullptr) {}
+    Vertex* parent;
+    Vertex(): weight(INT_MAX), visited(false), parent(nullptr) {}
 };
 typedef pair<int, int> iPair;
 
@@ -22,16 +22,16 @@ int main() {
     int numberOfVertices, numberOfEdges;
     cin >> numberOfVertices >> numberOfEdges;
     
-    vector<Node> vertices;
+    vector<Vertex> vertices;
     for (int i = 0; i < numberOfVertices; i++)
-        vertices.push_back(Node());
+        vertices.push_back(Vertex());
 
     vector<vector<iPair>> edges(numberOfVertices);
-    int n1, n2, cost;
+    int v1, v2, cost;
     for (int i = 0; i < numberOfEdges; i++) {
-        cin >> n1 >> n2 >> cost;
-        edges[n1].push_back(make_pair(n2, cost));
-        edges[n2].push_back(make_pair(n1, cost));
+        cin >> v1 >> v2 >> cost;
+        edges[v1].push_back(make_pair(v2, cost));
+        edges[v2].push_back(make_pair(v1, cost));
     }
 
     priority_queue<iPair, vector<iPair>, greater<iPair>> pq;
@@ -40,20 +40,20 @@ int main() {
     // make_pair(weight, vertex index), start at vertex 0 with weight 0
 
     while (!pq.empty()) {
-        n1 = pq.top().second;
+        v1 = pq.top().second;
         pq.pop();
 
-        if (vertices[n1].visited)
+        if (vertices[v1].visited)
             continue;
-        vertices[n1].visited = true;
+        vertices[v1].visited = true;
 
-        for (iPair &edge : edges[n1]) {
-            n2 = edge.first;
+        for (iPair &edge : edges[v1]) {
+            v2 = edge.first;
             cost = edge.second;
-            if (!vertices[n2].visited && vertices[n2].weight > cost) {
-                vertices[n2].weight = cost;
-                vertices[n2].parent = &vertices[n1];
-                pq.push(make_pair(vertices[n2].weight, n2));
+            if (!vertices[v2].visited && vertices[v2].weight > cost) {
+                vertices[v2].weight = cost;
+                vertices[v2].parent = &vertices[v1];
+                pq.push(make_pair(vertices[v2].weight, v2));
             }
         }
     }
