@@ -10,10 +10,10 @@
 using namespace std;
 
 struct Vertex {
-    int weight;
+    int index, weight;
     bool visited;
     Vertex* parent;
-    Vertex(): weight(INT_MAX), visited(false), parent(nullptr) {}
+    Vertex(int i): index(i), weight(INT_MAX), visited(false), parent(nullptr) {}
 };
 typedef pair<int, int> iPair;
 
@@ -24,7 +24,7 @@ int main() {
     
     vector<Vertex> vertices;
     for (int i = 0; i < numberOfVertices; i++)
-        vertices.push_back(Vertex());
+        vertices.push_back(Vertex(i));
 
     vector<vector<iPair>> edges(numberOfVertices);
     int v1, v2, cost;
