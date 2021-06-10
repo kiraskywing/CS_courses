@@ -26,13 +26,15 @@ public:
     ~bPlusTree() { destruct(root); }
     void insert(int);
     void insertInternal(Node*, Node*, int);
+    void search(int);
+    void print(Node*, int);
+    void access(int, int);
+    Node* getRoot() { return root; }
+    
     void remove(int);
     void removeInternal(Node*, Node*, int);
     void updateParent(Node*, Node*, int);
-
-    void search(int);
-    void print(Node*, int);
-    Node* getRoot() { return root; }
+    
     void destruct(Node*);
 };
 
@@ -52,17 +54,22 @@ int main() {
         else if (mode == 's') {
             cin >> value;
             BPtree.search(value);
-            cout << endl;
         }
         else if (mode == 'p') {
             BPtree.print(BPtree.getRoot(), 0);
-            cout << endl;
+        }
+        else if (mode == 'a') {
+            int times;
+            cin >> value >> times;
+            BPtree.access(value, times);
         }
         else if (mode == 'd') {
             cin >> value;
             BPtree.remove(value);
-            cout << endl;
         }
+        
+        if (mode != 'i')
+            cout << endl;
         cin >> mode;
     }
 
@@ -187,6 +194,14 @@ void bPlusTree::insertInternal(Node* cur, Node* child, int keyToInsert) {
         cur->nodeSize = (maxKeyNumber + 1) / 2;
         newInternal->nodeSize = maxKeyNumber - (maxKeyNumber + 1) / 2;
         
+        cur->children[0] = tempChildren[0];
+        cur->children[0]->parent = cur;
+        for (int i = 0; i < cur->nodeSize; i++) {
+            cur->keys[i] = tempKeys[i];
+            cur->children[i + 1] = tempChildren[i + 1];
+            cur->children[i + 1]->parent = cur;
+        }
+        
         newInternal->children[0] = tempChildren[cur->nodeSize + 1];
         newInternal->children[0]->parent = newInternal;
         for (int i = 0, j = cur->nodeSize + 1; i < newInternal->nodeSize; i++, j++) {
@@ -207,7 +222,7 @@ void bPlusTree::insertInternal(Node* cur, Node* child, int keyToInsert) {
         }
         else {
             newInternal->parent = cur->parent;
-            insertInternal(cur->parent, newInternal, cur->keys[cur->nodeSize]);
+            insertInternal(cur->parent, newInternal, tempKeys[cur->nodeSize]);
         }
     }
 }
@@ -248,6 +263,47 @@ void bPlusTree::search(int target) {
 
     cout << (found ? "Found" : "QAQ") << endl;
 }
+void bPlusTree::access(int target, int times) {
+    bool found = false;
+    Node* cur = root;
+    int i = 0;
+    
+    while (cur && !cur->isLeaf) {
+        i = 0;
+        while (i < cur->nodeSize && cur->keys[i] <= target)
+            i++;
+        cur = cur->children[i];
+    }
+
+    i = 0;
+    while (cur && i < cur->nodeSize) {
+        if (cur->keys[i] < target)
+            i++;
+        else if (cur->keys[i] == target) {
+            found = true;
+            break;
+        }
+        else
+            break;
+    }
+
+    if (!found)
+        cout << "Access Failed" << endl;
+    else {
+        while (cur && times > 0) {
+            cout << cur->keys[i] << ' ';
+            i++; times--;
+            if (i == cur->nodeSize) {
+                cur = cur->next;
+                i = 0;
+            }
+        }
+        cout << endl;
+        if (times > 0) 
+            cout << "N is too large" << endl;
+    }
+}
+
 void bPlusTree::destruct(Node* cur) {
     if (!cur) return;
     
@@ -354,7 +410,6 @@ void bPlusTree::remove(int target) {
         delete rightNode;
     }
 }
-
 void bPlusTree::removeInternal(Node* cur, Node* child, int target) {
     if (cur == root && cur->nodeSize == 1) {
         root = (cur->children[1] == child ? cur->children[0] : cur->children[1]);
