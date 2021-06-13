@@ -60,29 +60,41 @@ void mergesort(vector<int> &array, vector<int> &temp, int left, int right) {
 int main() {
     random_device rd;
     default_random_engine gen(rd());
-    uniform_int_distribution<int> dis(0, 100);
     
-    ofstream outFile("savings.txt");
-
-    int n, times = 100;
-    cin >> n;
-    vector<int> arr1(n, 0), arr2(n, 0), temp(n, 0);
-    while (times--) {
-        for (int i = 0; i < n; i++)
-            arr1[i] = arr2[i] = dis(gen);
+    int n = 100;
+    for (int j = 0; j < 8; j++) {
+        if (j > 0) n *= 2;
+        uniform_int_distribution<int> dis(0, n - 1);
         
-        clock_t t1_start = clock();
-        quicksort(arr1, 0, n - 1);
-        clock_t t1_end = clock();
+        double qtime = 0.0, mtime = 0.0;
 
-        clock_t t2_start = clock();
-        mergesort(arr2, temp, 0, n - 1);
-        clock_t t2_end = clock();
+        for (int times = 0; times < 100; times++) {
+            vector<int> arr1(n, 0), arr2(n, 0), used(n, 0), temp(n, 0);
+            int k = 0, num;
+            while (k < n) {
+                do {
+                    num = dis(gen);
+                } while (used[num]);
+                used[num] = 1;
+                arr1[k] = arr2[k] = num;
+                k++;
+            }
+            clock_t t1_start = clock();
+            quicksort(arr1, 0, n - 1);
+            clock_t t1_end = clock();
 
-        outFile << 1000.0 * (t1_end - t1_start) / CLOCKS_PER_SEC << ' '
-                << 1000.0 * (t2_end - t2_start) / CLOCKS_PER_SEC << endl;
+            clock_t t2_start = clock();
+            mergesort(arr2, temp, 0, n - 1);
+            clock_t t2_end = clock();
+
+            qtime += 1000000 * (t1_end - t1_start) / CLOCKS_PER_SEC;
+            mtime += 1000000 * (t2_end - t2_start) / CLOCKS_PER_SEC;
+        }
+
+        qtime /= 100;
+        mtime /= 100;
+        cout << qtime << ' ' << mtime << endl;
     }
-    outFile.close();
 
     return 0;
 }
