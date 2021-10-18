@@ -1,0 +1,14 @@
+0
+-1 
+-1
+1 ya
+5 fire attack
+-1
+1
+-1
+2 ice attack
+-1
+3
+4 fire attack
+-1
+3

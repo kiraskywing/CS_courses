@@ -1,0 +1,2 @@
+Cat(Tracy, 1)
+Dog(Barney, 5)

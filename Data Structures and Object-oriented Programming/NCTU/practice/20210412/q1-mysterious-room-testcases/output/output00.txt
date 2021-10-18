@@ -1,0 +1,7 @@
+0
+1 fire attack
+2 ya
+1
+-1
+3 ice attack
+4 ice attack
