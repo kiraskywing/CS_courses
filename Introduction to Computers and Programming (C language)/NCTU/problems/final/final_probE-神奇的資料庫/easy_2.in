@@ -1,0 +1,7 @@
+3
+3 30 canna
+2 73 bob
+1 60 abby
+2
+select name where number > 0
+select grade where number > 0

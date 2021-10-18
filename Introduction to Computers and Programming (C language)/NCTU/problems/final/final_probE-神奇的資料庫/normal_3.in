@@ -1,0 +1,47 @@
+20
+1 21 uno
+3 42 son
+5 53 sarasa
+7 64 katoru
+9 85 fyunfu
+11 36 shisu
+13 77 shete
+15 58 okuto
+17 99 nio
+19 100 eseru
+20 0 katserira
+18 12 esutariora
+16 39 roberia
+14 51 kaimu
+12 24 hazerira
+10 88 maria
+8 76 frau
+6 55 aranan
+4 32 gaizenboga
+2 43 nia
+25
+select name where grade > 56
+select number where name == maria
+update number += 5 where number > 16
+delete where number > 27
+update grade -= 10 where name == asuta
+select grade where number < 10
+delete where name == nia
+update name = nioo where name == nio
+select * where grade < 39
+update grade += 37 where grade < 50
+update number -= 1 where number > 20
+delete where grade > 99
+select name where number > 13
+select number where name == esutariora
+delete where grade < 25
+update name = urara where number < 3
+update grade += 19 where grade < 10
+update number -= 18 where number > 29
+select grade where name == urara
+update grade -= 3 where grade > 90
+select * where number < 5
+update grade += 7 where number > 10
+delete where number > 20
+update name = xdd where name == xd
+select * where number > 0

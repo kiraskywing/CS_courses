@@ -1,0 +1,14 @@
+5
+5 93 darius
+4 76 zed
+3 85 shen
+2 67 urgot
+1 81 leeshin
+7
+update grade += 10 where grade < 70
+delete where grade < 70
+select name where grade < 70
+update name = leexiaolon where name == leeshin
+delete wehre name == leexiaolon
+update number += 10 where number < 3
+select * where number > 1

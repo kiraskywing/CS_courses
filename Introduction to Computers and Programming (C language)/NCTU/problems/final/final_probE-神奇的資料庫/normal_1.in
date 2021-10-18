@@ -1,0 +1,14 @@
+5
+1 93 darius
+2 76 zed
+3 85 shen
+4 67 urgot
+5 81 leeshin
+7
+select name where number > 3
+select grade where name ==  katarina
+delete where number < 2
+delete where number < 2
+update grade += 10 where grade < 70
+update name = masteryi where name == shen
+select * where grade > 60
