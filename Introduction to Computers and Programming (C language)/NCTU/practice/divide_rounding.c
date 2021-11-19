@@ -1,17 +1,23 @@
 #include <stdio.h>
+#include <math.h>
 
-int main()
+int main(void)
 {
-    printf("The value of 4/3 is %d\n", 4/3);
-    printf("The value of 4.0/3.0 is %.3f\n", 4.0/3.0);
+    // Round to integer: 對input小數點第一位四捨五入
+    printf("Round 3.14 to integer using %%.0f: %.0f\n", 3.14);
+    printf("Round 3.54 to integer using %%.0f: %.0f\n", 3.54);
+    printf("round(3.14) in math.h: %f\n", round(3.14));
+    printf("round(3.54) in math.h: %f\n", round(3.54));
+    puts("");
 
-    int r = 0;
+    // Round up to integer: 得到大於等於input最小整數
+    printf("ceil(3.54) in math.h: %f\n", ceil(3.54));
+    printf("ceil(-3.54) in math.h: %f\n", ceil(-3.54));
+    puts("");
 
-    printf("Enter radius: ");
-    scanf("%d", &r);
-
-    printf("\nSphere volume: %.2f cubic meters\n",
-           4.0/3.0 * 3.14 * r * r * r);
+    // Round down to integer: 得到小於等於input最小整數
+    printf("floor(3.54) in math.h: %f\n", floor(3.54));
+    printf("floor(-3.54) in math.h: %f\n", floor(-3.54));
 
     return 0;
 }
