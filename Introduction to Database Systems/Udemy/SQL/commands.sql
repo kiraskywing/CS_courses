@@ -8,3 +8,6 @@ mysql_secure_installation  //set a password for root user
 mysql.server start -- to start the mysql server
 mysql -u root -p -- provide the new password
 mysql.server stop -- to stop the server
+
+-- redirect output to file
+https://ithelp.ithome.com.tw/articles/10197804
